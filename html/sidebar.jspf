@@ -1,0 +1,54 @@
+<!-- Sidebar -->
+<section id="sidebar">
+
+  <!-- Intro -->
+  <section id="intro">
+    <header>
+      <a href="<%=request.getContextPath()%>/index.jsp" class="logo">
+	<img src="<%=request.getContextPath()%>/images/logo_rt.png" alt=""/>
+	</a>
+	<h2>Continuous Integration</h2>
+    </header>
+  </section>
+  
+  <!-- Mini Posts -->
+  	<section>
+    	<div class="mini-posts">
+      	<!-- Mini Post -->
+      		<article class="mini-post">
+				<header>
+	  				<h3><a href="<%=request.getContextPath()%>/targets.jsp">Target Overview</a></h3>
+	  			</header>
+    	  	</article>
+    	</div>
+  	</section>
+  
+  <section>
+    <div class="mini-posts">
+      <!-- Mini Post -->
+      <article class="mini-post">
+	<header>
+	  <h3><a href="<%=request.getContextPath()%>/index.jsp">Build Overview</a></h3>
+	</header>
+	<div id="donut"></div>
+      </article>
+    </div>
+  </section>  
+
+  <!-- About -->
+  <section class="blurb">
+    <h2>About</h2>
+    <p>The Linutronix Test Environment (CI) automatically tests changes of the PREEMPT_RT patch on different hardware platforms with a defined test procedure. </p>
+    <ul class="actions">
+      <li><a href="<%=request.getContextPath()%>/about.jsp" class="button">Learn More</a></li>
+    </ul>
+  </section>
+      
+  <!-- Footer -->
+  <section id="footer">
+    <ul class="icons">
+      <li>You have questions or suggestions?<br/> Do not hesitate to contact the CI-Team!<a href="mailto:ci@linutronix.de" class="fa-envelope"><span class="label">Email</span></a></li>
+    </ul>
+    <p class="copyright">&copy; Untitled. Design: <a href="http://html5up.net">HTML5 UP</a>. Images: <a href="http://unsplash.com">Unsplash</a>.</p>
+  </section>
+</section>

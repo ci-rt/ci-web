@@ -1,0 +1,1805 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.5.4
+-- Dumped by pg_dump version 9.5.4
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET search_path = public, pg_catalog;
+
+DROP POLICY jenkins_all ON histogram;
+DROP POLICY jenkins_all ON git;
+DROP POLICY jenkins_all ON cyclictest;
+DROP POLICY jenkins_all ON build;
+DROP POLICY jenkins_all ON boottest;
+DROP POLICY jenkins_all ON rttest;
+DROP POLICY consumer_view ON rttest;
+DROP POLICY consumer_view ON histogram;
+DROP POLICY consumer_view ON git;
+DROP POLICY consumer_view ON cyclictest;
+DROP POLICY consumer_view ON build;
+DROP POLICY consumer_view ON boottest;
+ALTER TABLE ONLY public.target DROP CONSTRAINT target_label_id_fkey;
+ALTER TABLE ONLY public.tags DROP CONSTRAINT tags_git_id_fkey;
+ALTER TABLE ONLY public.rttest DROP CONSTRAINT rttest_commit_fkey;
+ALTER TABLE ONLY public.histogram DROP CONSTRAINT histogram_cyclictest_id_fkey;
+ALTER TABLE ONLY public.cyclictest DROP CONSTRAINT cyclictest_boottest_id_fkey;
+ALTER TABLE ONLY public.build DROP CONSTRAINT build_kernelbuild_id_fkey;
+ALTER TABLE ONLY public.boottest DROP CONSTRAINT boottest_target_id_fkey;
+ALTER TABLE ONLY public.boottest DROP CONSTRAINT boottest_build_id_fkey;
+DROP INDEX public.public_rttest_kernelbuild1_idx;
+DROP INDEX public.public_rttest_commit2_idx;
+DROP INDEX public.public_histogram_cyclictest_id1_idx;
+DROP INDEX public.public_cyclictest_boottest_id1_idx;
+DROP INDEX public.public_build_kernelbuild_id1_idx;
+DROP INDEX public.public_boottest_target_id2_idx;
+DROP INDEX public.public_boottest_pass3_idx;
+DROP INDEX public.public_boottest_build_id4_idx;
+DROP INDEX public.public_boottest_bootdate1_idx;
+ALTER TABLE ONLY public.usergroups DROP CONSTRAINT usergroups_pkey;
+ALTER TABLE ONLY public.usergroups DROP CONSTRAINT uk_groupname;
+ALTER TABLE ONLY public.passwd DROP CONSTRAINT uk_bl41yvvxsmkc1u0xbqm7dl8mf;
+ALTER TABLE ONLY public.target DROP CONSTRAINT target_pkey;
+ALTER TABLE ONLY public.tags DROP CONSTRAINT tags_uk_git_id;
+ALTER TABLE ONLY public.tags DROP CONSTRAINT tags_pkey;
+ALTER TABLE ONLY public.rttest DROP CONSTRAINT rttest_pkey;
+ALTER TABLE ONLY public.passwd DROP CONSTRAINT passwd_pk;
+ALTER TABLE ONLY public.label DROP CONSTRAINT label_pkey;
+ALTER TABLE ONLY public.histogram DROP CONSTRAINT histogram_pkey;
+ALTER TABLE ONLY public.git DROP CONSTRAINT git_pkey;
+ALTER TABLE ONLY public.cyclictest DROP CONSTRAINT cyclictest_pkey;
+ALTER TABLE ONLY public.build DROP CONSTRAINT build_pkey;
+ALTER TABLE ONLY public.boottest DROP CONSTRAINT boottest_pkey;
+ALTER TABLE public.target ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.tags ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.rttest ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.passwd ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.label ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.histogram ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.git ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.cyclictest ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.build ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.boottest ALTER COLUMN id DROP DEFAULT;
+DROP TABLE public.usergroups;
+DROP VIEW public.targets;
+DROP VIEW public.targetboot;
+DROP VIEW public.target_tests;
+DROP SEQUENCE public.target_id_seq;
+DROP SEQUENCE public.tags_id_seq;
+DROP SEQUENCE public.rttest_id_seq;
+DROP SEQUENCE public.passwd_id_seq;
+DROP TABLE public.passwd;
+DROP VIEW public.overview;
+DROP TABLE public.tags;
+DROP SEQUENCE public.label_id_seq;
+DROP VIEW public.kbuild;
+DROP TABLE public.label;
+DROP SEQUENCE public.histogram_id_seq;
+DROP TABLE public.histogram;
+DROP SEQUENCE public.hibernate_sequence;
+DROP SEQUENCE public.git_id_seq;
+DROP TABLE public.git;
+DROP VIEW public.donut;
+DROP VIEW public.detail;
+DROP TABLE public.rttest;
+DROP SEQUENCE public.cyclictest_id_seq;
+DROP VIEW public.cyc_target;
+DROP TABLE public.target;
+DROP TABLE public.cyclictest;
+DROP SEQUENCE public.build_id_seq;
+DROP TABLE public.build;
+DROP SEQUENCE public.boottest_id_seq;
+DROP TABLE public.boottest;
+DROP EXTENSION plpgsql;
+DROP SCHEMA public;
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA public;
+
+
+ALTER SCHEMA public OWNER TO postgres;
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA public IS 'standard public schema';
+
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: boottest; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE boottest (
+    id integer NOT NULL,
+    cmdline character varying(1024) NOT NULL,
+    pass boolean NOT NULL,
+    build_id integer NOT NULL,
+    target_id integer NOT NULL,
+    bootdate timestamp without time zone NOT NULL,
+    owner text DEFAULT 'consumer'::text NOT NULL
+);
+
+
+ALTER TABLE boottest OWNER TO postgres;
+
+--
+-- Name: boottest_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE boottest_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE boottest_id_seq OWNER TO postgres;
+
+--
+-- Name: boottest_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE boottest_id_seq OWNED BY boottest.id;
+
+
+--
+-- Name: build; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE build (
+    id integer NOT NULL,
+    custom character varying(40),
+    defconfig bytea NOT NULL,
+    "overlay" character varying(45) NOT NULL,
+    pass boolean NOT NULL,
+    kernelbuild_id integer NOT NULL,
+    config character varying(80) NOT NULL,
+    arch character varying(20) NOT NULL,
+    testscript bytea NOT NULL,
+    owner text DEFAULT 'consumer'::text NOT NULL
+);
+
+
+ALTER TABLE build OWNER TO postgres;
+
+--
+-- Name: build_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE build_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE build_id_seq OWNER TO postgres;
+
+--
+-- Name: build_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE build_id_seq OWNED BY build.id;
+
+
+--
+-- Name: cyclictest; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE cyclictest (
+    id integer NOT NULL,
+    load character varying(80) NOT NULL,
+    duration integer NOT NULL,
+    "interval" integer NOT NULL,
+    min integer NOT NULL,
+    avg integer NOT NULL,
+    max integer NOT NULL,
+    boottest_id integer NOT NULL,
+    pass boolean NOT NULL,
+    threshold integer NOT NULL,
+    testscript bytea NOT NULL,
+    owner text DEFAULT 'consumer'::text NOT NULL
+);
+
+
+ALTER TABLE cyclictest OWNER TO postgres;
+
+--
+-- Name: target; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE target (
+    id integer NOT NULL,
+    hostname character varying(80) NOT NULL,
+    shortdesc character varying(80) NOT NULL,
+    description bytea NOT NULL,
+    label_id integer NOT NULL
+);
+
+
+ALTER TABLE target OWNER TO postgres;
+
+--
+-- Name: cyc_target; Type: VIEW; Schema: public; Owner: consumer
+--
+
+CREATE VIEW cyc_target AS
+ SELECT t.shortdesc,
+    c.id AS c_id
+   FROM ((cyclictest c
+     JOIN boottest bt ON ((c.boottest_id = bt.id)))
+     JOIN target t ON ((bt.target_id = t.id)));
+
+
+ALTER TABLE cyc_target OWNER TO consumer;
+
+--
+-- Name: cyclictest_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE cyclictest_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE cyclictest_id_seq OWNER TO postgres;
+
+--
+-- Name: cyclictest_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE cyclictest_id_seq OWNED BY cyclictest.id;
+
+
+--
+-- Name: rttest; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE rttest (
+    id integer NOT NULL,
+    branch character varying(80) NOT NULL,
+    "timestamp" timestamp without time zone NOT NULL,
+    kernelbuild integer NOT NULL,
+    commit character varying(40) NOT NULL,
+    tags_id integer NOT NULL,
+    pass boolean NOT NULL,
+    owner text DEFAULT 'consumer'::text NOT NULL,
+    testbranch character varying(80) NOT NULL
+);
+
+
+ALTER TABLE rttest OWNER TO postgres;
+
+--
+-- Name: detail; Type: VIEW; Schema: public; Owner: consumer
+--
+
+CREATE VIEW detail AS
+ SELECT r.kernelbuild,
+    b.config,
+    b."overlay",
+    b.pass AS b_pass,
+    bt.pass AS bt_pass,
+    bt.pass AS cyc_pass,
+    b.id AS b_id,
+    bt.id AS bt_id,
+    c.id AS c_id,
+    b.arch
+   FROM (((rttest r
+     LEFT JOIN build b ON ((r.kernelbuild = b.kernelbuild_id)))
+     LEFT JOIN boottest bt ON ((b.id = bt.build_id)))
+     LEFT JOIN cyclictest c ON ((c.boottest_id = bt.id)));
+
+
+ALTER TABLE detail OWNER TO consumer;
+
+--
+-- Name: donut; Type: VIEW; Schema: public; Owner: consumer
+--
+
+CREATE VIEW donut AS
+ SELECT build.kernelbuild_id,
+    count(build.pass) AS passed,
+    count(build.id) AS count
+   FROM build
+  GROUP BY build.kernelbuild_id
+  ORDER BY build.kernelbuild_id DESC
+ LIMIT 10;
+
+
+ALTER TABLE donut OWNER TO consumer;
+
+--
+-- Name: git; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE git (
+    id integer NOT NULL,
+    path character varying(1024) NOT NULL,
+    public boolean NOT NULL,
+    httprepo text,
+    owner text DEFAULT 'consumer'::text NOT NULL
+);
+
+
+ALTER TABLE git OWNER TO postgres;
+
+--
+-- Name: git_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE git_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE git_id_seq OWNER TO postgres;
+
+--
+-- Name: git_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE git_id_seq OWNED BY git.id;
+
+
+--
+-- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE hibernate_sequence
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE hibernate_sequence OWNER TO postgres;
+
+--
+-- Name: histogram; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE histogram (
+    id integer NOT NULL,
+    cpu integer NOT NULL,
+    latency integer NOT NULL,
+    count integer NOT NULL,
+    cyclictest_id integer NOT NULL,
+    owner text DEFAULT 'consumer'::text NOT NULL
+);
+
+
+ALTER TABLE histogram OWNER TO postgres;
+
+--
+-- Name: histogram_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE histogram_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE histogram_id_seq OWNER TO postgres;
+
+--
+-- Name: histogram_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE histogram_id_seq OWNED BY histogram.id;
+
+
+--
+-- Name: label; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE label (
+    id integer NOT NULL,
+    arch character varying(20) NOT NULL,
+    family character varying(20) NOT NULL
+);
+
+
+ALTER TABLE label OWNER TO postgres;
+
+--
+-- Name: kbuild; Type: VIEW; Schema: public; Owner: consumer
+--
+
+CREATE VIEW kbuild AS
+ SELECT r.kernelbuild,
+    b.arch,
+    b.config,
+    b."overlay",
+    b.pass AS b_pass,
+    bt.pass AS bt_pass,
+    c.pass AS cyc_pass,
+    b.id AS b_id,
+    bt.id AS bt_id,
+    c.id AS c_id,
+    bt.target_id AS t_id,
+    concat_ws(' '::text, l.arch, l.family) AS t_label
+   FROM (((((rttest r
+     LEFT JOIN build b ON ((r.kernelbuild = b.kernelbuild_id)))
+     LEFT JOIN boottest bt ON ((b.id = bt.build_id)))
+     LEFT JOIN cyclictest c ON ((c.boottest_id = bt.id)))
+     LEFT JOIN target t ON ((bt.target_id = t.id)))
+     LEFT JOIN label l ON ((t.label_id = l.id)));
+
+
+ALTER TABLE kbuild OWNER TO consumer;
+
+--
+-- Name: label_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE label_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE label_id_seq OWNER TO postgres;
+
+--
+-- Name: label_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE label_id_seq OWNED BY label.id;
+
+
+--
+-- Name: tags; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE tags (
+    id integer NOT NULL,
+    git_id integer NOT NULL,
+    commit character varying(40) NOT NULL,
+    name character varying(80) NOT NULL
+);
+
+
+ALTER TABLE tags OWNER TO postgres;
+
+--
+-- Name: overview; Type: VIEW; Schema: public; Owner: consumer
+--
+
+CREATE VIEW overview AS
+ SELECT r.id,
+    r.branch,
+    r."timestamp",
+    r.commit,
+    t.name,
+    r.kernelbuild,
+    r.pass,
+    t.git_id,
+    g.path,
+    g.public
+   FROM ((rttest r
+     JOIN tags t ON ((r.tags_id = t.id)))
+     JOIN git g ON ((t.git_id = g.id)));
+
+
+ALTER TABLE overview OWNER TO consumer;
+
+--
+-- Name: passwd; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE passwd (
+    id integer NOT NULL,
+    username text NOT NULL,
+    salt text NOT NULL,
+    enabled boolean NOT NULL,
+    realname text NOT NULL
+);
+
+
+ALTER TABLE passwd OWNER TO postgres;
+
+--
+-- Name: passwd_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE passwd_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE passwd_id_seq OWNER TO postgres;
+
+--
+-- Name: passwd_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE passwd_id_seq OWNED BY passwd.id;
+
+
+--
+-- Name: rttest_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE rttest_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE rttest_id_seq OWNER TO postgres;
+
+--
+-- Name: rttest_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE rttest_id_seq OWNED BY rttest.id;
+
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE tags_id_seq OWNER TO postgres;
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE tags_id_seq OWNED BY tags.id;
+
+
+--
+-- Name: target_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE target_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE target_id_seq OWNER TO postgres;
+
+--
+-- Name: target_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE target_id_seq OWNED BY target.id;
+
+
+--
+-- Name: target_tests; Type: VIEW; Schema: public; Owner: consumer
+--
+
+CREATE VIEW target_tests AS
+ SELECT c.id AS c_id,
+    r.branch,
+    t.name,
+    r.commit,
+    r."timestamp",
+    b.config,
+    b."overlay",
+    r.kernelbuild,
+    bt.target_id AS t_id,
+    c.min AS c_min,
+    c.avg AS c_avg,
+    c.max AS c_max,
+    c.pass
+   FROM ((((rttest r
+     JOIN tags t ON ((r.tags_id = t.id)))
+     JOIN build b ON ((r.kernelbuild = b.kernelbuild_id)))
+     JOIN boottest bt ON ((b.id = bt.build_id)))
+     JOIN cyclictest c ON ((c.boottest_id = bt.id)));
+
+
+ALTER TABLE target_tests OWNER TO consumer;
+
+--
+-- Name: targetboot; Type: VIEW; Schema: public; Owner: consumer
+--
+
+CREATE VIEW targetboot AS
+ SELECT b.id,
+    b.build_id,
+    t.shortdesc,
+    b.bootdate,
+    b.cmdline,
+    b.pass
+   FROM (boottest b
+     JOIN target t ON ((b.target_id = t.id)));
+
+
+ALTER TABLE targetboot OWNER TO consumer;
+
+--
+-- Name: targets; Type: VIEW; Schema: public; Owner: consumer
+--
+
+CREATE VIEW targets AS
+ SELECT concat_ws(' '::text, l.arch, l.family) AS label,
+    t.shortdesc AS descr,
+    t.id AS t_id
+   FROM (target t
+     JOIN label l ON ((t.label_id = l.id)));
+
+
+ALTER TABLE targets OWNER TO consumer;
+
+--
+-- Name: usergroups; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE usergroups (
+    id bigint NOT NULL,
+    enabled boolean NOT NULL,
+    groupname character varying(255) NOT NULL
+);
+
+
+ALTER TABLE usergroups OWNER TO postgres;
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY boottest ALTER COLUMN id SET DEFAULT nextval('boottest_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY build ALTER COLUMN id SET DEFAULT nextval('build_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY cyclictest ALTER COLUMN id SET DEFAULT nextval('cyclictest_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY git ALTER COLUMN id SET DEFAULT nextval('git_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY histogram ALTER COLUMN id SET DEFAULT nextval('histogram_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY label ALTER COLUMN id SET DEFAULT nextval('label_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY passwd ALTER COLUMN id SET DEFAULT nextval('passwd_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY rttest ALTER COLUMN id SET DEFAULT nextval('rttest_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY target ALTER COLUMN id SET DEFAULT nextval('target_id_seq'::regclass);
+
+
+--
+-- Name: boottest_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY boottest
+    ADD CONSTRAINT boottest_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: build_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY build
+    ADD CONSTRAINT build_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cyclictest_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY cyclictest
+    ADD CONSTRAINT cyclictest_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: git_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY git
+    ADD CONSTRAINT git_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: histogram_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY histogram
+    ADD CONSTRAINT histogram_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: label_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY label
+    ADD CONSTRAINT label_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: passwd_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY passwd
+    ADD CONSTRAINT passwd_pk PRIMARY KEY (username);
+
+
+--
+-- Name: rttest_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY rttest
+    ADD CONSTRAINT rttest_pkey PRIMARY KEY (id, testbranch);
+
+
+--
+-- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tags
+    ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tags_uk_git_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tags
+    ADD CONSTRAINT tags_uk_git_id UNIQUE (git_id);
+
+
+--
+-- Name: target_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY target
+    ADD CONSTRAINT target_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: uk_bl41yvvxsmkc1u0xbqm7dl8mf; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY passwd
+    ADD CONSTRAINT uk_bl41yvvxsmkc1u0xbqm7dl8mf UNIQUE (username);
+
+
+--
+-- Name: uk_groupname; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY usergroups
+    ADD CONSTRAINT uk_groupname UNIQUE (groupname);
+
+
+--
+-- Name: usergroups_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY usergroups
+    ADD CONSTRAINT usergroups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: public_boottest_bootdate1_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX public_boottest_bootdate1_idx ON boottest USING btree (bootdate);
+
+
+--
+-- Name: public_boottest_build_id4_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX public_boottest_build_id4_idx ON boottest USING btree (build_id);
+
+
+--
+-- Name: public_boottest_pass3_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX public_boottest_pass3_idx ON boottest USING btree (pass);
+
+
+--
+-- Name: public_boottest_target_id2_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX public_boottest_target_id2_idx ON boottest USING btree (target_id);
+
+
+--
+-- Name: public_build_kernelbuild_id1_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX public_build_kernelbuild_id1_idx ON build USING btree (kernelbuild_id);
+
+
+--
+-- Name: public_cyclictest_boottest_id1_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX public_cyclictest_boottest_id1_idx ON cyclictest USING btree (boottest_id);
+
+
+--
+-- Name: public_histogram_cyclictest_id1_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX public_histogram_cyclictest_id1_idx ON histogram USING btree (cyclictest_id);
+
+
+--
+-- Name: public_rttest_commit2_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX public_rttest_commit2_idx ON rttest USING btree (commit);
+
+
+--
+-- Name: public_rttest_kernelbuild1_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX public_rttest_kernelbuild1_idx ON rttest USING btree (kernelbuild);
+
+
+--
+-- Name: boottest_build_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY boottest
+    ADD CONSTRAINT boottest_build_id_fkey FOREIGN KEY (build_id) REFERENCES build(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: boottest_target_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY boottest
+    ADD CONSTRAINT boottest_target_id_fkey FOREIGN KEY (target_id) REFERENCES target(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: build_kernelbuild_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY build
+    ADD CONSTRAINT build_kernelbuild_id_fkey FOREIGN KEY (kernelbuild_id) REFERENCES rttest(kernelbuild);
+
+
+--
+-- Name: cyclictest_boottest_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY cyclictest
+    ADD CONSTRAINT cyclictest_boottest_id_fkey FOREIGN KEY (boottest_id) REFERENCES boottest(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: histogram_cyclictest_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY histogram
+    ADD CONSTRAINT histogram_cyclictest_id_fkey FOREIGN KEY (cyclictest_id) REFERENCES cyclictest(id);
+
+
+--
+-- Name: rttest_commit_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY rttest
+    ADD CONSTRAINT rttest_commit_fkey FOREIGN KEY (tags_id) REFERENCES tags(id);
+
+
+--
+-- Name: tags_git_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tags
+    ADD CONSTRAINT tags_git_id_fkey FOREIGN KEY (id) REFERENCES git(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: target_label_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY target
+    ADD CONSTRAINT target_label_id_fkey FOREIGN KEY (label_id) REFERENCES label(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: boottest; Type: ROW SECURITY; Schema: public; Owner: postgres
+--
+
+ALTER TABLE boottest ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: build; Type: ROW SECURITY; Schema: public; Owner: postgres
+--
+
+ALTER TABLE build ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: consumer_view; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY consumer_view ON boottest FOR SELECT TO consumer USING ((owner = ("current_user"())::text));
+
+
+--
+-- Name: consumer_view; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY consumer_view ON build FOR SELECT TO consumer USING ((owner = ("current_user"())::text));
+
+
+--
+-- Name: consumer_view; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY consumer_view ON cyclictest FOR SELECT TO consumer USING ((owner = ("current_user"())::text));
+
+
+--
+-- Name: consumer_view; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY consumer_view ON git FOR SELECT TO consumer USING ((owner = ("current_user"())::text));
+
+
+--
+-- Name: consumer_view; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY consumer_view ON histogram FOR SELECT TO consumer USING ((owner = ("current_user"())::text));
+
+
+--
+-- Name: consumer_view; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY consumer_view ON rttest FOR SELECT TO consumer USING ((owner = ("current_user"())::text));
+
+
+--
+-- Name: cyclictest; Type: ROW SECURITY; Schema: public; Owner: postgres
+--
+
+ALTER TABLE cyclictest ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: git; Type: ROW SECURITY; Schema: public; Owner: postgres
+--
+
+ALTER TABLE git ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: histogram; Type: ROW SECURITY; Schema: public; Owner: postgres
+--
+
+ALTER TABLE histogram ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: jenkins_all; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY jenkins_all ON rttest FOR ALL TO jenkins USING (true) WITH CHECK (true);
+
+
+--
+-- Name: jenkins_all; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY jenkins_all ON boottest FOR ALL TO jenkins USING (true) WITH CHECK (true);
+
+
+--
+-- Name: jenkins_all; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY jenkins_all ON build FOR ALL TO jenkins USING (true) WITH CHECK (true);
+
+
+--
+-- Name: jenkins_all; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY jenkins_all ON cyclictest FOR ALL TO jenkins USING (true) WITH CHECK (true);
+
+
+--
+-- Name: jenkins_all; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY jenkins_all ON git FOR ALL TO jenkins USING (true) WITH CHECK (true);
+
+
+--
+-- Name: jenkins_all; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY jenkins_all ON histogram FOR ALL TO jenkins USING (true) WITH CHECK (true);
+
+
+--
+-- Name: rttest; Type: ROW SECURITY; Schema: public; Owner: postgres
+--
+
+ALTER TABLE rttest ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- Name: boottest; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON TABLE boottest FROM PUBLIC;
+REVOKE ALL ON TABLE boottest FROM postgres;
+GRANT ALL ON TABLE boottest TO postgres;
+GRANT ALL ON TABLE boottest TO jenkins;
+
+
+--
+-- Name: boottest.id; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(id) ON TABLE boottest FROM PUBLIC;
+REVOKE ALL(id) ON TABLE boottest FROM postgres;
+GRANT SELECT(id) ON TABLE boottest TO consumer;
+
+
+--
+-- Name: boottest.cmdline; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(cmdline) ON TABLE boottest FROM PUBLIC;
+REVOKE ALL(cmdline) ON TABLE boottest FROM postgres;
+GRANT SELECT(cmdline) ON TABLE boottest TO consumer;
+
+
+--
+-- Name: boottest.pass; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(pass) ON TABLE boottest FROM PUBLIC;
+REVOKE ALL(pass) ON TABLE boottest FROM postgres;
+GRANT SELECT(pass) ON TABLE boottest TO consumer;
+
+
+--
+-- Name: boottest.build_id; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(build_id) ON TABLE boottest FROM PUBLIC;
+REVOKE ALL(build_id) ON TABLE boottest FROM postgres;
+GRANT SELECT(build_id) ON TABLE boottest TO consumer;
+
+
+--
+-- Name: boottest.target_id; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(target_id) ON TABLE boottest FROM PUBLIC;
+REVOKE ALL(target_id) ON TABLE boottest FROM postgres;
+GRANT SELECT(target_id) ON TABLE boottest TO consumer;
+
+
+--
+-- Name: boottest.bootdate; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(bootdate) ON TABLE boottest FROM PUBLIC;
+REVOKE ALL(bootdate) ON TABLE boottest FROM postgres;
+GRANT SELECT(bootdate) ON TABLE boottest TO consumer;
+
+
+--
+-- Name: boottest_id_seq; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE boottest_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE boottest_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE boottest_id_seq TO postgres;
+GRANT SELECT,USAGE ON SEQUENCE boottest_id_seq TO jenkins;
+
+
+--
+-- Name: build; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON TABLE build FROM PUBLIC;
+REVOKE ALL ON TABLE build FROM postgres;
+GRANT ALL ON TABLE build TO postgres;
+GRANT ALL ON TABLE build TO jenkins;
+
+
+--
+-- Name: build.id; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(id) ON TABLE build FROM PUBLIC;
+REVOKE ALL(id) ON TABLE build FROM postgres;
+GRANT SELECT(id) ON TABLE build TO consumer;
+
+
+--
+-- Name: build.custom; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(custom) ON TABLE build FROM PUBLIC;
+REVOKE ALL(custom) ON TABLE build FROM postgres;
+GRANT SELECT(custom) ON TABLE build TO consumer;
+
+
+--
+-- Name: build.defconfig; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(defconfig) ON TABLE build FROM PUBLIC;
+REVOKE ALL(defconfig) ON TABLE build FROM postgres;
+GRANT SELECT(defconfig) ON TABLE build TO consumer;
+
+
+--
+-- Name: build.overlay; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL("overlay") ON TABLE build FROM PUBLIC;
+REVOKE ALL("overlay") ON TABLE build FROM postgres;
+GRANT SELECT("overlay") ON TABLE build TO consumer;
+
+
+--
+-- Name: build.pass; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(pass) ON TABLE build FROM PUBLIC;
+REVOKE ALL(pass) ON TABLE build FROM postgres;
+GRANT SELECT(pass) ON TABLE build TO consumer;
+
+
+--
+-- Name: build.kernelbuild_id; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(kernelbuild_id) ON TABLE build FROM PUBLIC;
+REVOKE ALL(kernelbuild_id) ON TABLE build FROM postgres;
+GRANT SELECT(kernelbuild_id) ON TABLE build TO consumer;
+
+
+--
+-- Name: build.config; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(config) ON TABLE build FROM PUBLIC;
+REVOKE ALL(config) ON TABLE build FROM postgres;
+GRANT SELECT(config) ON TABLE build TO consumer;
+
+
+--
+-- Name: build.arch; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(arch) ON TABLE build FROM PUBLIC;
+REVOKE ALL(arch) ON TABLE build FROM postgres;
+GRANT SELECT(arch) ON TABLE build TO consumer;
+
+
+--
+-- Name: build.testscript; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(testscript) ON TABLE build FROM PUBLIC;
+REVOKE ALL(testscript) ON TABLE build FROM postgres;
+GRANT SELECT(testscript) ON TABLE build TO consumer;
+
+
+--
+-- Name: build_id_seq; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE build_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE build_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE build_id_seq TO postgres;
+GRANT SELECT,USAGE ON SEQUENCE build_id_seq TO jenkins;
+
+
+--
+-- Name: cyclictest; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON TABLE cyclictest FROM PUBLIC;
+REVOKE ALL ON TABLE cyclictest FROM postgres;
+GRANT ALL ON TABLE cyclictest TO postgres;
+GRANT ALL ON TABLE cyclictest TO jenkins;
+
+
+--
+-- Name: cyclictest.id; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(id) ON TABLE cyclictest FROM PUBLIC;
+REVOKE ALL(id) ON TABLE cyclictest FROM postgres;
+GRANT SELECT(id) ON TABLE cyclictest TO consumer;
+
+
+--
+-- Name: cyclictest.load; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(load) ON TABLE cyclictest FROM PUBLIC;
+REVOKE ALL(load) ON TABLE cyclictest FROM postgres;
+GRANT SELECT(load) ON TABLE cyclictest TO consumer;
+
+
+--
+-- Name: cyclictest.duration; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(duration) ON TABLE cyclictest FROM PUBLIC;
+REVOKE ALL(duration) ON TABLE cyclictest FROM postgres;
+GRANT SELECT(duration) ON TABLE cyclictest TO consumer;
+
+
+--
+-- Name: cyclictest.interval; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL("interval") ON TABLE cyclictest FROM PUBLIC;
+REVOKE ALL("interval") ON TABLE cyclictest FROM postgres;
+GRANT SELECT("interval") ON TABLE cyclictest TO consumer;
+
+
+--
+-- Name: cyclictest.min; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(min) ON TABLE cyclictest FROM PUBLIC;
+REVOKE ALL(min) ON TABLE cyclictest FROM postgres;
+GRANT SELECT(min) ON TABLE cyclictest TO consumer;
+
+
+--
+-- Name: cyclictest.avg; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(avg) ON TABLE cyclictest FROM PUBLIC;
+REVOKE ALL(avg) ON TABLE cyclictest FROM postgres;
+GRANT SELECT(avg) ON TABLE cyclictest TO consumer;
+
+
+--
+-- Name: cyclictest.max; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(max) ON TABLE cyclictest FROM PUBLIC;
+REVOKE ALL(max) ON TABLE cyclictest FROM postgres;
+GRANT SELECT(max) ON TABLE cyclictest TO consumer;
+
+
+--
+-- Name: cyclictest.boottest_id; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(boottest_id) ON TABLE cyclictest FROM PUBLIC;
+REVOKE ALL(boottest_id) ON TABLE cyclictest FROM postgres;
+GRANT SELECT(boottest_id) ON TABLE cyclictest TO consumer;
+
+
+--
+-- Name: cyclictest.pass; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(pass) ON TABLE cyclictest FROM PUBLIC;
+REVOKE ALL(pass) ON TABLE cyclictest FROM postgres;
+GRANT SELECT(pass) ON TABLE cyclictest TO consumer;
+
+
+--
+-- Name: cyclictest.threshold; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(threshold) ON TABLE cyclictest FROM PUBLIC;
+REVOKE ALL(threshold) ON TABLE cyclictest FROM postgres;
+GRANT SELECT(threshold) ON TABLE cyclictest TO consumer;
+
+
+--
+-- Name: cyclictest.testscript; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(testscript) ON TABLE cyclictest FROM PUBLIC;
+REVOKE ALL(testscript) ON TABLE cyclictest FROM postgres;
+GRANT SELECT(testscript) ON TABLE cyclictest TO consumer;
+
+
+--
+-- Name: cyclictest.owner; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(owner) ON TABLE cyclictest FROM PUBLIC;
+REVOKE ALL(owner) ON TABLE cyclictest FROM postgres;
+GRANT SELECT(owner) ON TABLE cyclictest TO consumer;
+
+
+--
+-- Name: target; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON TABLE target FROM PUBLIC;
+REVOKE ALL ON TABLE target FROM postgres;
+GRANT ALL ON TABLE target TO postgres;
+GRANT ALL ON TABLE target TO jenkins;
+GRANT SELECT ON TABLE target TO consumer;
+
+
+--
+-- Name: cyc_target; Type: ACL; Schema: public; Owner: consumer
+--
+
+REVOKE ALL ON TABLE cyc_target FROM PUBLIC;
+REVOKE ALL ON TABLE cyc_target FROM consumer;
+GRANT ALL ON TABLE cyc_target TO consumer;
+GRANT ALL ON TABLE cyc_target TO jenkins;
+
+
+--
+-- Name: cyclictest_id_seq; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE cyclictest_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE cyclictest_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE cyclictest_id_seq TO postgres;
+GRANT SELECT,USAGE ON SEQUENCE cyclictest_id_seq TO jenkins;
+
+
+--
+-- Name: rttest; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON TABLE rttest FROM PUBLIC;
+REVOKE ALL ON TABLE rttest FROM postgres;
+GRANT ALL ON TABLE rttest TO postgres;
+GRANT ALL ON TABLE rttest TO jenkins;
+
+
+--
+-- Name: rttest.id; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(id) ON TABLE rttest FROM PUBLIC;
+REVOKE ALL(id) ON TABLE rttest FROM postgres;
+GRANT SELECT(id) ON TABLE rttest TO consumer;
+
+
+--
+-- Name: rttest.branch; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(branch) ON TABLE rttest FROM PUBLIC;
+REVOKE ALL(branch) ON TABLE rttest FROM postgres;
+GRANT SELECT(branch) ON TABLE rttest TO consumer;
+
+
+--
+-- Name: rttest.timestamp; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL("timestamp") ON TABLE rttest FROM PUBLIC;
+REVOKE ALL("timestamp") ON TABLE rttest FROM postgres;
+GRANT SELECT("timestamp") ON TABLE rttest TO consumer;
+
+
+--
+-- Name: rttest.kernelbuild; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(kernelbuild) ON TABLE rttest FROM PUBLIC;
+REVOKE ALL(kernelbuild) ON TABLE rttest FROM postgres;
+GRANT SELECT(kernelbuild) ON TABLE rttest TO consumer;
+
+
+--
+-- Name: rttest.commit; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(commit) ON TABLE rttest FROM PUBLIC;
+REVOKE ALL(commit) ON TABLE rttest FROM postgres;
+GRANT SELECT(commit) ON TABLE rttest TO consumer;
+
+
+--
+-- Name: rttest.tags_id; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(tags_id) ON TABLE rttest FROM PUBLIC;
+REVOKE ALL(tags_id) ON TABLE rttest FROM postgres;
+GRANT SELECT(tags_id) ON TABLE rttest TO consumer;
+
+
+--
+-- Name: rttest.pass; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(pass) ON TABLE rttest FROM PUBLIC;
+REVOKE ALL(pass) ON TABLE rttest FROM postgres;
+GRANT SELECT(pass) ON TABLE rttest TO consumer;
+
+
+--
+-- Name: detail; Type: ACL; Schema: public; Owner: consumer
+--
+
+REVOKE ALL ON TABLE detail FROM PUBLIC;
+REVOKE ALL ON TABLE detail FROM consumer;
+GRANT ALL ON TABLE detail TO consumer;
+GRANT ALL ON TABLE detail TO jenkins;
+
+
+--
+-- Name: git; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON TABLE git FROM PUBLIC;
+REVOKE ALL ON TABLE git FROM postgres;
+GRANT ALL ON TABLE git TO postgres;
+GRANT ALL ON TABLE git TO jenkins;
+
+
+--
+-- Name: git.id; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(id) ON TABLE git FROM PUBLIC;
+REVOKE ALL(id) ON TABLE git FROM postgres;
+GRANT SELECT(id) ON TABLE git TO consumer;
+
+
+--
+-- Name: git.path; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(path) ON TABLE git FROM PUBLIC;
+REVOKE ALL(path) ON TABLE git FROM postgres;
+GRANT SELECT(path) ON TABLE git TO consumer;
+
+
+--
+-- Name: git.public; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(public) ON TABLE git FROM PUBLIC;
+REVOKE ALL(public) ON TABLE git FROM postgres;
+GRANT SELECT(public) ON TABLE git TO consumer;
+
+
+--
+-- Name: git.httprepo; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(httprepo) ON TABLE git FROM PUBLIC;
+REVOKE ALL(httprepo) ON TABLE git FROM postgres;
+GRANT SELECT(httprepo) ON TABLE git TO consumer;
+
+
+--
+-- Name: git_id_seq; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE git_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE git_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE git_id_seq TO postgres;
+GRANT SELECT,USAGE ON SEQUENCE git_id_seq TO jenkins;
+
+
+--
+-- Name: histogram; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON TABLE histogram FROM PUBLIC;
+REVOKE ALL ON TABLE histogram FROM postgres;
+GRANT ALL ON TABLE histogram TO postgres;
+GRANT ALL ON TABLE histogram TO jenkins;
+
+
+--
+-- Name: histogram.id; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(id) ON TABLE histogram FROM PUBLIC;
+REVOKE ALL(id) ON TABLE histogram FROM postgres;
+GRANT SELECT(id) ON TABLE histogram TO consumer;
+
+
+--
+-- Name: histogram.cpu; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(cpu) ON TABLE histogram FROM PUBLIC;
+REVOKE ALL(cpu) ON TABLE histogram FROM postgres;
+GRANT SELECT(cpu) ON TABLE histogram TO consumer;
+
+
+--
+-- Name: histogram.latency; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(latency) ON TABLE histogram FROM PUBLIC;
+REVOKE ALL(latency) ON TABLE histogram FROM postgres;
+GRANT SELECT(latency) ON TABLE histogram TO consumer;
+
+
+--
+-- Name: histogram.count; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(count) ON TABLE histogram FROM PUBLIC;
+REVOKE ALL(count) ON TABLE histogram FROM postgres;
+GRANT SELECT(count) ON TABLE histogram TO consumer;
+
+
+--
+-- Name: histogram.cyclictest_id; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL(cyclictest_id) ON TABLE histogram FROM PUBLIC;
+REVOKE ALL(cyclictest_id) ON TABLE histogram FROM postgres;
+GRANT SELECT(cyclictest_id) ON TABLE histogram TO consumer;
+
+
+--
+-- Name: histogram_id_seq; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE histogram_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE histogram_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE histogram_id_seq TO postgres;
+GRANT SELECT,USAGE ON SEQUENCE histogram_id_seq TO jenkins;
+
+
+--
+-- Name: label; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON TABLE label FROM PUBLIC;
+REVOKE ALL ON TABLE label FROM postgres;
+GRANT ALL ON TABLE label TO postgres;
+GRANT ALL ON TABLE label TO jenkins;
+GRANT SELECT ON TABLE label TO consumer;
+
+
+--
+-- Name: kbuild; Type: ACL; Schema: public; Owner: consumer
+--
+
+REVOKE ALL ON TABLE kbuild FROM PUBLIC;
+REVOKE ALL ON TABLE kbuild FROM consumer;
+GRANT ALL ON TABLE kbuild TO consumer;
+GRANT ALL ON TABLE kbuild TO jenkins;
+
+
+--
+-- Name: label_id_seq; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE label_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE label_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE label_id_seq TO postgres;
+GRANT SELECT,USAGE ON SEQUENCE label_id_seq TO jenkins;
+
+
+--
+-- Name: tags; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON TABLE tags FROM PUBLIC;
+REVOKE ALL ON TABLE tags FROM postgres;
+GRANT ALL ON TABLE tags TO postgres;
+GRANT ALL ON TABLE tags TO jenkins;
+GRANT SELECT ON TABLE tags TO consumer;
+
+
+--
+-- Name: overview; Type: ACL; Schema: public; Owner: consumer
+--
+
+REVOKE ALL ON TABLE overview FROM PUBLIC;
+REVOKE ALL ON TABLE overview FROM consumer;
+GRANT ALL ON TABLE overview TO consumer;
+GRANT ALL ON TABLE overview TO jenkins;
+
+
+--
+-- Name: passwd; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON TABLE passwd FROM PUBLIC;
+REVOKE ALL ON TABLE passwd FROM postgres;
+GRANT ALL ON TABLE passwd TO postgres;
+GRANT ALL ON TABLE passwd TO jenkins;
+GRANT ALL ON TABLE passwd TO consumer;
+
+
+--
+-- Name: passwd_id_seq; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE passwd_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE passwd_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE passwd_id_seq TO postgres;
+GRANT SELECT,USAGE ON SEQUENCE passwd_id_seq TO jenkins;
+
+
+--
+-- Name: rttest_id_seq; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE rttest_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE rttest_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE rttest_id_seq TO postgres;
+GRANT SELECT,USAGE ON SEQUENCE rttest_id_seq TO jenkins;
+
+
+--
+-- Name: tags_id_seq; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE tags_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE tags_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE tags_id_seq TO postgres;
+GRANT SELECT,USAGE ON SEQUENCE tags_id_seq TO jenkins;
+
+
+--
+-- Name: target_id_seq; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE target_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE target_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE target_id_seq TO postgres;
+GRANT SELECT,USAGE ON SEQUENCE target_id_seq TO jenkins;
+
+
+--
+-- Name: targetboot; Type: ACL; Schema: public; Owner: consumer
+--
+
+REVOKE ALL ON TABLE targetboot FROM PUBLIC;
+REVOKE ALL ON TABLE targetboot FROM consumer;
+GRANT ALL ON TABLE targetboot TO consumer;
+GRANT ALL ON TABLE targetboot TO jenkins;
+
+
+--
+-- Name: targets; Type: ACL; Schema: public; Owner: consumer
+--
+
+REVOKE ALL ON TABLE targets FROM PUBLIC;
+REVOKE ALL ON TABLE targets FROM consumer;
+GRANT ALL ON TABLE targets TO consumer;
+GRANT ALL ON TABLE targets TO jenkins;
+
+
+--
+-- Name: usergroups; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON TABLE usergroups FROM PUBLIC;
+REVOKE ALL ON TABLE usergroups FROM postgres;
+GRANT ALL ON TABLE usergroups TO postgres;
+GRANT ALL ON TABLE usergroups TO consumer;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

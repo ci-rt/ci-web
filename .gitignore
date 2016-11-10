@@ -1,0 +1,10 @@
+.*
+!.classpath
+!.gitignore
+!.project
+
+*~
+\#*#
+
+/build
+/target/

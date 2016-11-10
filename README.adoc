@@ -1,0 +1,121 @@
+CI-WEB instance
+===============
+
+The ci-web instance hosts the CI-RT Web application as well as the database,
+which is filled with test results by
+https://github.com/Linutronix/ci-rt/jenkins[CI-RT Jenkins].
+
+
+Setup of CI-WEB instance
+------------------------
+
+The instance is a Debian stretch based system.
+
+The following Debian packages are required:
+
+* maven (version 3 is default)
+* postgresql-9.5
+* tomcat8
+* tomcat8-admin
+* openjdk-8-jdk
+
+----
+sudo apt-get install maven postgresql-9.5 tomcat8 tomcat8-admin openjdk-8-jdk
+----
+
+The ci-web and visualization-datasource git repositories need to be cloned:
+
+----
+git clone https://github.com/Linutronix/ci-rt/ci-web.git
+git clone https://github.com/Linutronix/ci-rt/visualization-datasource.git
+----
+
+Configure postgresql
+~~~~~~~~~~~~~~~~~~~~
+
+First, a data base RT-Test needs to be created. Therefore change the user to
+postgres and execute the _createdb_ command:
+
+----
+su - postgres
+createdb RT-Test
+----
+
+Create nessessary database roles "jenkins" for injection and "consumer"
+for reading access. Run _createuser_ to as user postgres achieve this:
+
+----
+createuser -E -l -P jenkins
+createuser -E -l -P consumer
+----
+
+
+After this, the data base scheme needs to be inserted into the created data
+base:
+
+----
+psql RT-Test < /PATH/TO/CI-WEB/GIT/REPO/sql/RT-Test.psql
+----
+
+
+Configure tomcat8
+~~~~~~~~~~~~~~~~~
+
+tomcat8 is setup and started after installation. To deploy a WAR file, a user
+with the role "manager-gui" is needed. An explanation is given when calling
+http://localhost:8080/manager/html and abort the prompted login.
+
+
+Creating CI-RT Web application
+------------------------------
+
+To deploy the web application on tomcat, a WAR file needs to be created. The
+versioning of the web application is defined in the pom.xml file and
+differentiate between release and development.
+
+
+build WAR file
+~~~~~~~~~~~~~~
+
+create visualization-datasource, that is required by ci-web:
+
+----
+cd visualization-datasource
+mvn install
+----
+
+create ci-web WAR file:
+
+----
+cd ci-web
+mvn package
+----
+
+WAR file is available: ci-web/target/NAME##VERSION.war
+
+
+
+deploy WAR file (jetty and tomcat)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+During development, the WAR file can be tested using jetty:
+
+----
+cd ci-web
+mvn jetty:run
+----
+
+The web application is then available via http://localhost:9090
+
+After development, the WAR file can be deployed on tomcat. Therefore, open
+http://localhost:8080/manager/html in the web browser. The WAR file to deploy can
+be uploaded and then started in the Applications overview web interface.
+
+Make a release
+~~~~~~~~~~~~~~
+
+The versions are handled via pom.xml file. To create a new release, version
+tag has to be changed to the new release number. If there is a SNAPSHOT behind
+release, web application is under development and is in preparation for the
+next release.

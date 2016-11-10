@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="RT-Test" version="3.1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+
+  <display-name>Real-Time Linux Continuous Integration</display-name>
+  <description>Real-Time Linux Continuous Integration Application</description>
+
+  <!-- Security configuration -->
+  
+  <session-config>
+    <cookie-config>
+      <http-only>true</http-only>
+      <secure>false</secure>
+    </cookie-config>
+  </session-config>
+  
+  <listener>
+    <listener-class>de.linutronix.rttest.Listener</listener-class>
+   </listener>
+</web-app>

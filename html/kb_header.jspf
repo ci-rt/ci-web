@@ -1,0 +1,7 @@
+   <header>
+      <div class="title">	    
+	<h3>Details Build ID ${param.id}</h3>
+	<p id="p_header"> </p>
+      </div>
+    </header>
+

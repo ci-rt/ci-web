@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<Context path=""
+	antiResourceLocking="false"
+	useHttpOnly="true">
+  <WatchedResource>META-INF/context.xml</WatchedResource>
+  <WatchedResource>WEB-INF/web.xml</WatchedResource>
+  <WatchedResource>WEB-INF/db.properties</WatchedResource>
+</Context>
