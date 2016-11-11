@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>RT-Test</groupId>
   <artifactId>RT-Test</artifactId>
-  <version>0.1.6</version>
+  <version>0.1.7</version>
   <packaging>war</packaging>
   <name>CiRTLTest</name>
   <description>Linux RT Continous Integration Project</description>
@@ -61,6 +61,11 @@
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <version>3.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet.jsp</groupId>

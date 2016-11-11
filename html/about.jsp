@@ -80,6 +80,15 @@
     visit <a href="https://github.com/ci-rt" target= "_blank">CI-RT github
     project</a>.</p>
 
+    <p>
+    The standardized elbe based root file systems for the test targets can be
+    downloaded
+    <a href="https://ci-rt.linutronix.de/download/target-elbe-rfs/">here</a>.
+    The test targets need to fulfil several requirements to be placed into the
+    test rack
+    (see <a href="https://ci-rt.linutronix.de/download/system-requirements.pdf">"System
+    Requirements"</a> for more details). </p>
+
   </article>
 </div>
 

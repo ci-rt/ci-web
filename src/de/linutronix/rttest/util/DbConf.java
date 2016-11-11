@@ -3,16 +3,12 @@ package de.linutronix.rttest.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 public class DbConf {
-	private static Logger logger = Logger.getLogger("de.linutronix.rttest");
-
 	private String URL;
 	private String dbuser;
 	private String dbpassword;

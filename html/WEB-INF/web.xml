@@ -10,6 +10,7 @@
   <!-- Security configuration -->
   
   <session-config>
+    <session-timeout>30</session-timeout>
     <cookie-config>
       <http-only>true</http-only>
       <secure>false</secure>
