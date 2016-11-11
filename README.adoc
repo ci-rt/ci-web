@@ -3,7 +3,7 @@ CI-WEB instance
 
 The ci-web instance hosts the CI-RT Web application as well as the database,
 which is filled with test results by
-https://github.com/Linutronix/ci-rt/jenkins[CI-RT Jenkins].
+https://github.com/ci-rt/jenkins[CI-RT Jenkins].
 
 
 Setup of CI-WEB instance
@@ -26,8 +26,8 @@ sudo apt-get install maven postgresql-9.5 tomcat8 tomcat8-admin openjdk-8-jdk
 The ci-web and visualization-datasource git repositories need to be cloned:
 
 ----
-git clone https://github.com/Linutronix/ci-rt/ci-web.git
-git clone https://github.com/Linutronix/ci-rt/visualization-datasource.git
+git clone https://github.com/ci-rt/ci-web.git
+git clone https://github.com/ci-rt/visualization-datasource.git
 ----
 
 Configure postgresql
