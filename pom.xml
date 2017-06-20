@@ -2,13 +2,19 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>RT-Test</groupId>
   <artifactId>RT-Test</artifactId>
-  <version>0.1.7</version>
+  <version>0.1.8</version>
   <packaging>war</packaging>
   <name>CiRTLTest</name>
   <description>Linux RT Continous Integration Project</description>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <finalName>${project.artifactId}##${project.version}</finalName>
+    <resources>
+      <resource>
+	<directory>src/main/resources</directory>
+	<filtering>true</filtering>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>

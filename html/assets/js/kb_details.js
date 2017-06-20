@@ -35,7 +35,7 @@ function overview() {
     query_b.send(drawBuild);
 
     if (cur_bootid != 0) {
-	var query_bt = new google.visualization.Query(dataUrl.concat ("boottest"), opts);
+	var query_bt = new google.visualization.Query(dataUrl.concat ("boottest_view"), opts);
 
 	query_bt.setQuery('select target_id, cmdline, pass where id=' +cur_bootid);
 	query_bt.send(Boot);
@@ -81,12 +81,15 @@ function Boot(response) {
     }
 
     boot_data = response.getDataTable();
+    var formatter = new google.visualization.NumberFormat(
+	{fractionDigits: 0, groupingSymbol: ''});
+    formatter.format(boot_data, 0);
     var target_id = boot_data.getFormattedValue(0,0);
 
     var opts = {sendMethod: 'auto'};
-    var query = new google.visualization.Query(dataUrl.concat ("target"), opts);
+    var query = new google.visualization.Query(dataUrl.concat ("targets"), opts);
 
-    query.setQuery('select shortdesc where id=' +target_id);
+    query.setQuery('select descr where t_id=' +target_id);
     query.send(drawBoot);
 }
 
@@ -111,7 +114,7 @@ function drawBoot(response) {
 	bt_status.src = success;
 	bt_status.alt = "Test succeeded";
 	var opts = {sendMethod: 'auto'};
-	var query_cyc = new google.visualization.Query(dataUrl.concat ("cyclictest"), opts);
+	var query_cyc = new google.visualization.Query(dataUrl.concat ("cyclictest_view"), opts);
 
 	query_cyc.setQuery('select id, load, duration, interval, min, avg, max, pass, threshold where boottest_id=' +cur_bootid);
 	query_cyc.send(drawCyclic);

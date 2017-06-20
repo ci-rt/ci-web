@@ -89,7 +89,7 @@ public class Testscript extends HttpServlet {
 				filename = "buildtest-script";
 			}
 			else if (test.equals("cyclic")) {
-				table = "cyclictest";
+				table = "cyclictest_view";
 				filename = "cyclictest-script";
 			}
 			else {

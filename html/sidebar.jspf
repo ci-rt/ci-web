@@ -1,3 +1,4 @@
+<%@ page import = "java.util.ResourceBundle" %>
 <!-- Sidebar -->
 <section id="sidebar">
 
@@ -49,6 +50,10 @@
     <ul class="icons">
       <li>You have questions or suggestions?<br/> Do not hesitate to contact the CI-Team!<a href="mailto:ci@linutronix.de" class="fa-envelope"><span class="label">Email</span></a></li>
     </ul>
-    <p class="copyright">&copy; Untitled. Design: <a href="http://html5up.net">HTML5 UP</a>. Images: <a href="http://unsplash.com">Unsplash</a>.</p>
+    <p class="copyright">&copy; Untitled. Design: <a href="http://html5up.net">HTML5 UP</a>.</p>
+    <% ResourceBundle resource = ResourceBundle.getBundle("application");
+       String version = resource.getString("application.version"); %>
+
+    <p class="copyright" align="right">CI-Web current version: <%=version %></p>
   </section>
 </section>

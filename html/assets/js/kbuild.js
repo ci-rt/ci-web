@@ -60,6 +60,11 @@ function detailHandler(e) {
 
     if(!item)
 	return;
+
+    var formatter = new google.visualization.NumberFormat(
+	{fractionDigits: 0, groupingSymbol: ''});
+    formatter.format(detail_data, 7);
+    formatter.format(detail_data, 8);
     
     var buildid = detail_data.getFormattedValue(item.row, 7);
     var bootid = detail_data.getFormattedValue(item.row, 8);

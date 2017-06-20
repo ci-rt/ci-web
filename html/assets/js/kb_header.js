@@ -34,7 +34,7 @@ function drawHeading(response) {
     if (heading_data.getFormattedValue(0, 9) == 'true') {
 	heading.innerHTML = time+ ' <br> Branch: ' +branch+ ' <br> Tag: ' +name;
 	var opts = {sendMethod: 'auto'};
-	var query_git = new google.visualization.Query(dataUrl.concat ("git"), opts);
+	var query_git = new google.visualization.Query(dataUrl.concat ("git_view"), opts);
 
 	query_git.setQuery('select httprepo, path where id=' +git_id);
 	query_git.send(makeGitLink);

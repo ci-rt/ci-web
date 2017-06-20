@@ -156,6 +156,9 @@ function detailHandler(e) {
     if(!item)
 	return;
 
+    var formatter = new google.visualization.NumberFormat(
+	{fractionDigits: 0, groupingSymbol: ''});
+    formatter.format(data_max, 0);
     c_id = data_max.getFormattedValue(item.row, 0);
     
     var opts = {sendMethod: 'auto'};
@@ -173,7 +176,10 @@ function callHisto(response) {
     }
 
     kbuild = response.getDataTable();
-    
+
+    var formatter = new google.visualization.NumberFormat(
+	{fractionDigits: 0, groupingSymbol: ''});
+    formatter.format(kbuild, 0);
     k_id = kbuild.getFormattedValue(0, 0);
     
     var win = window.open(histoUrl.concat(c_id, '&id=', k_id), '_blank');

@@ -24,7 +24,7 @@ function chartsLoaded() {
 
 function histogram() {
     var opts = {sendMethod: 'auto'};
-    var query = new google.visualization.Query(dataUrl.concat ("histogram"), opts);
+    var query = new google.visualization.Query(dataUrl.concat ("histogram_view"), opts);
 
     query.setQuery('select cpu, latency, count where cyclictest_id = ' + cur_cyclictest);
 
@@ -36,7 +36,7 @@ function histogram() {
 
     query_t.send(drawArch);
 
-    var query_stat = new google.visualization.Query(dataUrl.concat ("cyclictest"), opts);
+    var query_stat = new google.visualization.Query(dataUrl.concat ("cyclictest_view"), opts);
 
     query_stat.setQuery('select pass, threshold where id = ' + cur_cyclictest);
 
