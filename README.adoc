@@ -1,8 +1,8 @@
 CI-WEB instance
 ===============
 
-The ci-web instance hosts the CI-RT Web application as well as the database,
-which is filled with test results by
+The ci-web instance hosts the CI-RT Web application. It needs access
+to the database which is filled with test results by
 https://github.com/ci-rt/jenkins[CI-RT Jenkins].
 
 
@@ -30,32 +30,14 @@ git clone https://github.com/ci-rt/ci-web.git
 git clone https://github.com/ci-rt/visualization-datasource.git
 ----
 
-Configure postgresql
-~~~~~~~~~~~~~~~~~~~~
+Configure database
+~~~~~~~~~~~~~~~~~~
 
-First, a data base RT-Test needs to be created. Therefore change the user to
-postgres and execute the _createdb_ command:
-
-----
-su - postgres
-createdb RT-Test
-----
-
-Create nessessary database roles "jenkins" for injection and "consumer"
-for reading access. Run _createuser_ to as user postgres achieve this:
-
-----
-createuser -E -l -P jenkins
-createuser -E -l -P consumer
-----
-
-
-After this, the data base scheme needs to be inserted into the created data
-base:
-
-----
-psql RT-Test < /PATH/TO/CI-WEB/GIT/REPO/sql/RT-Test.psql
-----
+Jenkins uses a database to fill in the test results. Those test
+results are visualized by ci-web. For setup of the database please
+consider
+https://github.com/ci-rt/database/blob/master/README.adoc[database
+README]. The database can be hosted on the CI-WEB instance.
 
 
 Configure tomcat8
