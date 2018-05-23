@@ -98,7 +98,9 @@ function overviewHandler(e) {
     var selection = table.getChart().getSelection();
     var item = selection[0];
 
-    var str = overview_data.getFormattedValue(item.row, 0);
+    var dataview = table.getDataTable();
+    var row = dataview.getUnderlyingTableRowIndex(item.row);
+    var str = overview_data.getFormattedValue(row, 0);
 
     window.location.assign(detailUrl.concat(str));
 
