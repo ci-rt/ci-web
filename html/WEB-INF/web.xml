@@ -9,12 +9,8 @@
 
   <!-- Security configuration -->
   
-  <session-config>
+  <session-config enable-cookies="false" enable-url-rewriting="true">
     <session-timeout>30</session-timeout>
-    <cookie-config>
-      <http-only>true</http-only>
-      <secure>false</secure>
-    </cookie-config>
   </session-config>
   
   <listener>

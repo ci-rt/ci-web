@@ -2,7 +2,8 @@
 <!DOCTYPE xml>
 <Context path=""
 	antiResourceLocking="false"
-	useHttpOnly="true">
+	useHttpOnly="true"
+	cookies="false">
   <WatchedResource>META-INF/context.xml</WatchedResource>
   <WatchedResource>WEB-INF/web.xml</WatchedResource>
   <WatchedResource>WEB-INF/db.properties</WatchedResource>
