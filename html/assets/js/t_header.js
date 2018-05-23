@@ -9,7 +9,7 @@ function embedHeading(t_id) {
     var opts = {sendMethod: 'auto'};
     var query = new google.visualization.Query(dataUrl.concat ("targets"), opts);
 
-    query.setQuery('select * where t_id=' +cur_target);
+    query.setQuery('select * where t_id=' + safe_id(cur_target));
     query.send(drawHeading);
 }
 

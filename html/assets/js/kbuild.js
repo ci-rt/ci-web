@@ -18,7 +18,7 @@ function overview() {
     var opts = {sendMethod: 'auto'};
     var query = new google.visualization.Query(dataUrl.concat ("kbuild"), opts);
 
-    query.setQuery('select * where kernelbuild=' +cur_kernelbuild);
+    query.setQuery('select * where kernelbuild=' + safe_id(cur_kernelbuild));
     query.send(drawOverview);
 
     donut();
@@ -72,6 +72,8 @@ function detailHandler(e) {
     if (!bootid)
 	bootid = 0;
 
-    window.location.assign(kbdetailUrl.concat(cur_kernelbuild, '&b_id=', buildid, '&bt_id=', bootid));
+    window.location.assign(kbdetailUrl.concat(cur_kernelbuild,
+					      '&b_id=', safe_id(buildid),
+					      '&bt_id=', safe_id(bootid)));
 }
 

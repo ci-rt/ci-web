@@ -31,7 +31,7 @@ function targetOverview() {
     var opts = {sendMethod: 'auto'};
     var query = new google.visualization.Query(dataUrl.concat ("target_tests"), opts);
 
-    query.setQuery('select * where t_id=' +target_id);
+    query.setQuery('select * where t_id=' + safe_id(target_id));
     query.send(drawOverview);
 }
 
@@ -164,7 +164,7 @@ function detailHandler(e) {
     var opts = {sendMethod: 'auto'};
     var query = new google.visualization.Query(dataUrl.concat ("target_tests"), opts);
 
-    query.setQuery('select kernelbuild where c_id=' +c_id);
+    query.setQuery('select kernelbuild where c_id=' + safe_id(c_id));
     query.send(callHisto);
     chart.setSelection();
 }

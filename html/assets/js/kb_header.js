@@ -12,7 +12,7 @@ function embedHeading(kernelbuild) {
     var opts = {sendMethod: 'auto'};
     var query = new google.visualization.Query(dataUrl.concat ("overview"), opts);
 
-    query.setQuery('select * where kernelbuild=' +cur_kernelbuild);
+    query.setQuery('select * where kernelbuild=' + safe_id(cur_kernelbuild));
     query.send(drawHeading);
 }
 
@@ -36,7 +36,7 @@ function drawHeading(response) {
 	var opts = {sendMethod: 'auto'};
 	var query_git = new google.visualization.Query(dataUrl.concat ("git_view"), opts);
 
-	query_git.setQuery('select httprepo, path where id=' +git_id);
+	query_git.setQuery('select httprepo, path where id=' + safe_id(git_id));
 	query_git.send(makeGitLink);
     } else {
 	head = commit.substring(0,12);

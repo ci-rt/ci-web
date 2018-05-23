@@ -102,8 +102,7 @@ function overviewHandler(e) {
     var row = dataview.getUnderlyingTableRowIndex(item.row);
     var str = overview_data.getFormattedValue(row, 0);
 
-    window.location.assign(detailUrl.concat(str));
+    window.location.assign(detailUrl.concat(safe_id(str)));
 
     table.getChart().setSelection();
 }
-

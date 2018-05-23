@@ -31,13 +31,13 @@ function overview() {
     var opts = {sendMethod: 'auto'};
     var query_b = new google.visualization.Query(dataUrl.concat ("build"), opts);
 
-    query_b.setQuery('select overlay, pass, config where id=' +cur_buildid);
+    query_b.setQuery('select overlay, pass, config where id=' + safe_id(cur_buildid));
     query_b.send(drawBuild);
 
     if (cur_bootid != 0) {
 	var query_bt = new google.visualization.Query(dataUrl.concat ("boottest_view"), opts);
 
-	query_bt.setQuery('select target_id, cmdline, pass where id=' +cur_bootid);
+	query_bt.setQuery('select target_id, cmdline, pass where id=' + safe_id(cur_bootid));
 	query_bt.send(Boot);
 	document.getElementById('boot_div').style.visibility = 'visible';
     }
@@ -89,7 +89,7 @@ function Boot(response) {
     var opts = {sendMethod: 'auto'};
     var query = new google.visualization.Query(dataUrl.concat ("targets"), opts);
 
-    query.setQuery('select descr where t_id=' +target_id);
+    query.setQuery('select descr where t_id=' + safe_id(target_id));
     query.send(drawBoot);
 }
 
@@ -116,7 +116,7 @@ function drawBoot(response) {
 	var opts = {sendMethod: 'auto'};
 	var query_cyc = new google.visualization.Query(dataUrl.concat ("cyclictest_view"), opts);
 
-	query_cyc.setQuery('select id, load, duration, interval, min, avg, max, pass, threshold where boottest_id=' +cur_bootid);
+	query_cyc.setQuery('select id, load, duration, interval, min, avg, max, pass, threshold where boottest_id=' + safe_id(cur_bootid));
 	query_cyc.send(drawCyclic);
     } else {
 	bt_status.src = failed;
@@ -181,15 +181,15 @@ function cyclicHandler(e) {
 	return;
     
     var str = cyclic_data.getFormattedValue(item.row, 0)
-    window.location.assign(histoUrl.concat(str, '&id=', cur_kernelbuild));
+    window.location.assign(histoUrl.concat(str, '&id=', safe_id(cur_kernelbuild)));
 }
 
 function downloadConfig(buildid) {
     var downloadUrl = "Kernelconfig?id=";
-    window.location.assign(downloadUrl.concat(buildid));
+    window.location.assign(downloadUrl.concat(safe_id(buildid)));
 }
 
 function downloadScript(buildid) {
     var downloadUrl = "Testscript?test=build&id=";
-    window.location.assign(downloadUrl.concat(buildid));
+    window.location.assign(downloadUrl.concat(safe_id(buildid)));
 }

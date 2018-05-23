@@ -26,19 +26,19 @@ function histogram() {
     var opts = {sendMethod: 'auto'};
     var query = new google.visualization.Query(dataUrl.concat ("histogram_view"), opts);
 
-    query.setQuery('select cpu, latency, count where cyclictest_id = ' + cur_cyclictest);
+    query.setQuery('select cpu, latency, count where cyclictest_id = ' + safe_id(cur_cyclictest));
 
     query.send(drawHistogram);
 
     var query_t = new google.visualization.Query(dataUrl.concat ("cyc_target"), opts);
 
-    query_t.setQuery('select * where c_id = ' + cur_cyclictest);
+    query_t.setQuery('select * where c_id = ' + safe_id(cur_cyclictest));
 
     query_t.send(drawArch);
 
     var query_stat = new google.visualization.Query(dataUrl.concat ("cyclictest_view"), opts);
 
-    query_stat.setQuery('select pass, threshold where id = ' + cur_cyclictest);
+    query_stat.setQuery('select pass, threshold where id = ' + safe_id(cur_cyclictest));
 
     query_stat.send(drawStat);
 }
@@ -133,5 +133,5 @@ function drawHistogram(response) {
 
 function downloadScript(buildid) {
     var downloadUrl = "Testscript?test=cyclic&id=";
-    window.location.assign(downloadUrl.concat(buildid));
+    window.location.assign(downloadUrl.concat(safe_id(buildid)));
 }

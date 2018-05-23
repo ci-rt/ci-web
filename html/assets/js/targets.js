@@ -51,6 +51,6 @@ function targetHandler(e) {
 
     var str = overview_data.getFormattedValue(item.row, 2);
 
-    window.location.assign(t_testsUrl.concat(str));
+    window.location.assign(t_testsUrl.concat(safe_id(str)));
 }
 
