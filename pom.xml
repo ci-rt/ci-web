@@ -67,6 +67,12 @@
           <version>9.4.15.v20190215</version>
           <configuration>
             <war>${project.basedir}/target/${project.artifactId}##${project.version}.war</war>
+            <webApp>
+              <resourceBases>
+                <resourceBase>${project.basedir}/src/main/webapp</resourceBase>
+                <resourceBase>${project.build.directory}/${project.build.finalName}</resourceBase>
+              </resourceBases>
+            </webApp>
             <webAppSourceDirectory>${basedir}/html</webAppSourceDirectory>
             <httpConnector>
               <!--host>localhost</host-->
@@ -171,6 +177,10 @@
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>3.1.11</version>
+      </plugin>
+      <plugin>
+        <groupId>nl.geodienstencentrum.maven</groupId>
+        <artifactId>sass-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </reporting>
