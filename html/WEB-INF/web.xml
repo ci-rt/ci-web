@@ -8,12 +8,7 @@
   <description>Real-Time Linux Continuous Integration Application</description>
 
   <!-- Security configuration -->
-  
   <session-config enable-cookies="false" enable-url-rewriting="true">
     <session-timeout>30</session-timeout>
   </session-config>
-  
-  <listener>
-    <listener-class>de.linutronix.rttest.Listener</listener-class>
-   </listener>
 </web-app>
