@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>RT-Test</groupId>
   <artifactId>RT-Test</artifactId>
-  <version>0.1.9</version>
+  <version>0.1.10-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>CiRTLTest</name>
   <description>Linux RT Continous Integration Project</description>
