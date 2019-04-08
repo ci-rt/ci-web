@@ -5,6 +5,7 @@ package de.linutronix.rttest.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Properties;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -19,27 +20,29 @@ import javax.servlet.ServletException;
  *
  * @author Benedikt Spranger
  */
-public class DbConf {
+public class DbConf implements Serializable {
+
+    private static final long serialVersionUID = 0L;
 
     /**
      * The database connection URL.
      */
-    private String url;
+    private final String url;
 
     /**
      * The database user.
      */
-    private String dbuser;
+    private final String dbuser;
 
     /**
      * The database password.
      */
-    private String dbpassword;
+    private final String dbpassword;
 
     /**
      * The database driver class.
      */
-    private String dbclass;
+    private final String dbclass;
 
     /**
      * The debug status.
@@ -49,7 +52,7 @@ public class DbConf {
     /**
      * The database SQL dialect.
      */
-    private String dialect;
+    private final String dialect;
 
     /**
      * Initialize database connection class member.
