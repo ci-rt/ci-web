@@ -56,7 +56,7 @@ public class Passwd {
      */
     public Passwd(final String user, final byte[] newsalt) {
         this.username = user;
-        this.salt = newsalt;
+        this.salt = newsalt.clone();
         this.enabled = true;
     }
 
@@ -102,7 +102,7 @@ public class Passwd {
      * @return password salt
      */
     public byte[] getSalt() {
-        return salt;
+        return salt.clone();
     }
 
     /**
@@ -111,7 +111,7 @@ public class Passwd {
      * @param newsalt password salt
      */
     public void setSalt(final byte[] newsalt) {
-        this.salt = newsalt;
+        this.salt = newsalt.clone();
     }
 
     /**
