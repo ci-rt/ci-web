@@ -15,6 +15,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 public class DbConf {
+
     private String URL;
     private String dbuser;
     private String dbpassword;

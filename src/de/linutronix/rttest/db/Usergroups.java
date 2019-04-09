@@ -10,6 +10,7 @@ import org.hibernate.annotations.NaturalId;
 @Entity
 @Table
 public class Usergroups {
+
     @Id
     @GeneratedValue
     private Long id;

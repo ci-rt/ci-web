@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @WebServlet("/Data")
 public class Data extends DataSourceServlet {
+
     private static final long serialVersionUID = 1L;
     private DbConf db;
 
