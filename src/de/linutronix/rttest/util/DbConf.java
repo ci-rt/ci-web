@@ -16,7 +16,7 @@ import javax.servlet.ServletException;
 
 public class DbConf {
 
-    private String URL;
+    private String url;
     private String dbuser;
     private String dbpassword;
     private String dbclass;
@@ -61,14 +61,14 @@ public class DbConf {
             throw new ServletException("Database not configured.");
         }
 
-        String DbClass = prop.getProperty("class");
+        String dbClass = prop.getProperty("class");
         try {
-            Class.forName(DbClass);
+            Class.forName(dbClass);
         } catch (ClassNotFoundException e) {
-            throw new ServletException("Could not load database class" + DbClass);
+            throw new ServletException("Could not load database class" + dbClass);
         }
 
-        URL = initialize(context, prop, "URL");
+        url = initialize(context, prop, "URL");
         dbclass = initialize(context, prop, "class");
         dbuser = initialize(context, prop, "user");
         dbpassword = initialize(context, prop, "password");
@@ -77,7 +77,7 @@ public class DbConf {
     }
 
     public String toString() {
-        return "URL    : " + URL
+        return "URL    : " + url
                 + "\ndbuser : " + dbuser
                 + "\ndbpass : " + dbpassword
                 + "\ndebug  : " + debug
@@ -95,7 +95,7 @@ public class DbConf {
         if (dbclass == null) {
             throw new ServletException("db.property: class not set");
         }
-        return URL;
+        return url;
     }
 
     public String getDbuser() throws ServletException {

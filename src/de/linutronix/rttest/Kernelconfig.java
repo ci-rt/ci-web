@@ -24,7 +24,7 @@ public class Kernelconfig extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private String URL;
+    private String url;
     private String user;
     private String password;
 
@@ -56,14 +56,14 @@ public class Kernelconfig extends HttpServlet {
         }
 
         // get the property value and print it out
-        String DbClass = prop.getProperty("class");
+        String dbClass = prop.getProperty("class");
         try {
-            Class.forName(DbClass);
+            Class.forName(dbClass);
         } catch (ClassNotFoundException e) {
-            throw new ServletException("Could not load database class" + DbClass);
+            throw new ServletException("Could not load database class" + dbClass);
         }
 
-        URL = prop.getProperty("URL");
+        url = prop.getProperty("URL");
         user = prop.getProperty("user");
         password = prop.getProperty("password");
     }
@@ -82,7 +82,7 @@ public class Kernelconfig extends HttpServlet {
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         try {
-            Connection con = DriverManager.getConnection(URL, user, password);
+            Connection con = DriverManager.getConnection(url, user, password);
             Statement stmt = con.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
