@@ -22,8 +22,8 @@ public class Usergroups {
     public Usergroups() {
     }
 
-    public Usergroups(String group) {
-        this.groupname = group;
+    public Usergroups(String newgroup) {
+        this.groupname = newgroup;
         this.enabled = true;
     }
 
@@ -31,8 +31,8 @@ public class Usergroups {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long newid) {
+        this.id = newid;
     }
 
     public String getGroup() {
@@ -47,8 +47,8 @@ public class Usergroups {
         return enabled;
     }
 
-    public void setGroupStatus(Boolean enabled) {
-        this.enabled = enabled;
+    public void setGroupStatus(Boolean enable) {
+        this.enabled = enable;
     }
 
     public String toString() {

@@ -23,9 +23,9 @@ public class Passwd {
     public Passwd() {
     }
 
-    public Passwd(String user, byte[] salt) {
+    public Passwd(String user, byte[] newsalt) {
         this.username = user;
-        this.salt = salt;
+        this.salt = newsalt;
         this.enabled = true;
     }
 
@@ -33,8 +33,8 @@ public class Passwd {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long newid) {
+        this.id = newid;
     }
 
     public String getUser() {
@@ -49,15 +49,15 @@ public class Passwd {
         return salt;
     }
 
-    public void setSalt(byte[] salt) {
-        this.salt = salt;
+    public void setSalt(byte[] newsalt) {
+        this.salt = newsalt;
     }
 
     public Boolean getUserStatus() {
         return enabled;
     }
 
-    public void setUserStatus(Boolean enabled) {
-        this.enabled = enabled;
+    public void setUserStatus(Boolean enable) {
+        this.enabled = enable;
     }
 }
