@@ -5,6 +5,8 @@ The ci-web instance hosts the CI-RT Web application. It needs access
 to the database which is filled with test results by
 https://github.com/ci-rt/jenkins[CI-RT Jenkins].
 
+If you like to develop code for CI-RT, please notice the content of
+the sections "License rules" and "Copyright notice".
 
 Setup of CI-WEB instance
 ------------------------
@@ -101,3 +103,44 @@ The versions are handled via pom.xml file. To create a new release, version
 tag has to be changed to the new release number. If there is a SNAPSHOT behind
 release, web application is under development and is in preparation for the
 next release.
+
+License rules
+-------------
+
+The CI-RT Web application is provided under the terms of the MIT
+license as provided in the LICENSES/MIT file.
+
+Instead of adding MIT boilerplates to the individual files, CI-RT uses
+SPDX license identifiers, which are machine parseable and considered
+legaly equivalent.
+
+The SPDX license identifier in CI-RT Web application shall be added at the
+first possible line in a file which can contain a comment. This is
+normally the first line except for scripts. Scripts require the
+'#!PATH_TO_INTERPRETER' tag in the first line; place the SPDX
+identifier into the second line.
+
+The SPDX license identifier is added in form of a comment.  The
+comment style depends on the file type::
+
+[options="header"]
+|=============================================================================
+| files/scripts	| SPDX license identifier
+| bash		| # SPDX-License-Identifier: <SPDX License Expression>
+| css		| /* SPDX-License-Identifier: <SPDX License Expression> */
+| html		| <!-- SPDX-License-Identifier: <SPDX License Expression> -->
+| java		| // SPDX-License-Identifier: <SPDX License Expression>
+| js		| /* SPDX-License-Identifier: <SPDX License Expression> */
+| python	| # SPDX-License-Identifier: <SPDX License Expression>
+| sass		| // SPDX-License-Identifier: <SPDX License Expression>
+| xml		| <!-- SPDX-License-Identifier: <SPDX License Expression> -->
+|=============================================================================
+
+Copyright notice
+----------------
+
+Copyright notices shall be placed right below the SPDX identifier with
+the same comment format as the SPDX identifier. The canonical form for
+a copyright notice is:
+
+Copyright (c) <year> <copyright holders>
