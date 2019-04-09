@@ -81,7 +81,7 @@ public class Kernelconfig extends HttpServlet {
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         try {
-            Connection con = DriverManager.getConnection(URL,user,password);
+            Connection con = DriverManager.getConnection(URL, user, password);
             Statement stmt = con.createStatement(
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
@@ -107,7 +107,7 @@ public class Kernelconfig extends HttpServlet {
             response.setContentLengthLong(defconf.length);
             response.setHeader("Content-Transfer-Encoding", "binary");
             response.setHeader("Content-Disposition",
-                    "attachment; filename=\""+filename+"\"");
+                    "attachment; filename=\"" + filename + "\"");
 
             OutputStream o = response.getOutputStream();
             o.write(defconf);

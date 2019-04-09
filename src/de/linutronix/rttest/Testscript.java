@@ -82,7 +82,7 @@ public class Testscript extends HttpServlet {
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         try {
-            Connection con = DriverManager.getConnection(URL,user,password);
+            Connection con = DriverManager.getConnection(URL, user, password);
             Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
             ResultSet rs;
@@ -103,7 +103,7 @@ public class Testscript extends HttpServlet {
                 return;
             }
 
-            rs = stmt.executeQuery("SELECT testscript FROM "+table
+            rs = stmt.executeQuery("SELECT testscript FROM " + table
                     + " WHERE id = " + id + ";");
             if (!rs.next()) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST,
@@ -117,7 +117,7 @@ public class Testscript extends HttpServlet {
             response.setContentLengthLong(script.length);
             response.setHeader("Content-Transfer-Encoding", "binary");
             response.setHeader("Content-Disposition",
-                    "attachment; filename=\""+filename+"\"");
+                    "attachment; filename=\"" + filename + "\"");
 
             OutputStream o = response.getOutputStream();
             o.write(script);
