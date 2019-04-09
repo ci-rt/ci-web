@@ -73,13 +73,6 @@ public class Kernelconfig extends HttpServlet {
     }
 
     /**
-     * @see Servlet#destroy()
-     */
-    public void destroy() {
-        // TODO Auto-generated method stub
-    }
-
-    /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      * response)
      */
