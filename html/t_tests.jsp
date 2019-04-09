@@ -1,9 +1,6 @@
 <!DOCTYPE HTML>
-<!--
-    Future Imperfect by HTML5 UP
-    html5up.net | @ajlkn
-    Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-  -->
+<!-- SPDX-License-Identifier: MIT -->
+<!-- Copyright (c) 2016-2019 Linutronix GmbH -->
 <html>
 
 <%@ include file="head.jspf" %>

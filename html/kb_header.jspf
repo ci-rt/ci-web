@@ -1,4 +1,6 @@
-   <header>
+<!-- SPDX-License-Identifier: MIT -->
+<!-- Copyright (c) 2016-2019 Linutronix GmbH -->
+    <header>
       <div class="title">	    
 	<h3>Details Build ID ${param.id}</h3>
 	<p id="p_header"> </p>
