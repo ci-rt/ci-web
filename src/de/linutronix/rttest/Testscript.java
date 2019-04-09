@@ -3,14 +3,13 @@
 
 package de.linutronix.rttest;
 
+import de.linutronix.rttest.util.DbConf;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Properties;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -27,9 +26,10 @@ public class Testscript extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private String url;
-    private String user;
-    private String password;
+    /**
+     * Database configuration settings.
+     */
+    private DbConf db;
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -52,33 +52,7 @@ public class Testscript extends HttpServlet {
     @Override
     public void init(final ServletConfig config) throws ServletException {
         super.init(config);
-
-        InputStream input = getServletContext()
-                .getResourceAsStream("/WEB-INF/db.properties");
-        Properties prop = new Properties();
-
-        if (input != null) {
-            try {
-                prop.load(input);
-            } catch (IOException e) {
-                throw new ServletException("Failed to read DB properties.");
-            }
-        } else {
-            throw new ServletException("Database not configured.");
-        }
-
-        // get the property value and print it out
-        String dbClass = prop.getProperty("class");
-        try {
-            Class.forName(dbClass);
-        } catch (ClassNotFoundException e) {
-            throw new ServletException("Could not load database class"
-                    + dbClass);
-        }
-
-        url = prop.getProperty("URL");
-        user = prop.getProperty("user");
-        password = prop.getProperty("password");
+        db = new DbConf(config);
     }
 
     /**
@@ -94,7 +68,8 @@ public class Testscript extends HttpServlet {
             final HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            Connection con = DriverManager.getConnection(url, user, password);
+            Connection con = DriverManager.getConnection(db.getURL(),
+                    db.getDbuser(), db.getDbpassword());
             Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
             ResultSet rs;
