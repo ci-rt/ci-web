@@ -52,10 +52,11 @@ public class Usergroups {
 
     public String toString() {
         String status;
-        if (enabled)
+        if (enabled) {
             status = "enabled";
-        else
+        } else {
             status = "disabled";
+        }
 
         return "'" + groupname + "' " + status;
     }

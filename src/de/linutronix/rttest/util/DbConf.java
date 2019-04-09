@@ -112,8 +112,9 @@ public class DbConf {
     }
 
     public String getDebug() {
-        if (debug == null)
+        if (debug == null) {
             debug = "false";
+        }
         return debug;
     }
 
