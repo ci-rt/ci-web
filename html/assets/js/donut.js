@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: MIT */
+/* Copyright (c) 2016-2019 Linutronix GmbH */
+
 var dataUrl;
 var detailUrl;
 

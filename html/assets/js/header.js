@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: MIT */
+/* Copyright (c) 2016-2019 Linutronix GmbH */
+
 function safe_id(rawid) {
     var regex = /[.,\s]+/g;
     var id = String(rawid).replace(regex, "");
