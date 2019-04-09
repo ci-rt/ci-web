@@ -60,16 +60,16 @@ public class HibernateHttpServlet extends HttpServlet {
         }
     }
 
-    public void addAnnotatedClass (Class<?> aClass)
+    public void addAnnotatedClass(Class<?> aClass)
     {
-        configuration.addAnnotatedClass (aClass);
+        configuration.addAnnotatedClass(aClass);
     }
 
     public SessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
-    public Session openSession () {
+    public Session openSession() {
         return getSessionFactory().openSession();
     }
 

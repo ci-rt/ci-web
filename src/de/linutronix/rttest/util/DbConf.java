@@ -22,7 +22,7 @@ public class DbConf {
     private String debug;
     private String dialect;
 
-    private String initialize (ServletContext context, Properties prop,
+    private String initialize(ServletContext context, Properties prop,
             String property) {
         String ovr, env, val;
 
@@ -67,12 +67,12 @@ public class DbConf {
             throw new ServletException("Could not load database class" + DbClass);
         }
 
-        URL = initialize (context, prop, "URL");
-        dbclass = initialize (context, prop, "class");
-        dbuser = initialize (context, prop, "user");
-        dbpassword = initialize (context, prop, "password");
-        debug = initialize (context, prop, "debug");
-        dialect = initialize (context, prop, "dialect");
+        URL = initialize(context, prop, "URL");
+        dbclass = initialize(context, prop, "class");
+        dbuser = initialize(context, prop, "user");
+        dbpassword = initialize(context, prop, "password");
+        debug = initialize(context, prop, "debug");
+        dialect = initialize(context, prop, "dialect");
     }
 
     public String toString() {
