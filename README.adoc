@@ -128,6 +128,7 @@ comment style depends on the file type::
 | files/scripts	| SPDX license identifier
 | bash		| # SPDX-License-Identifier: <SPDX License Expression>
 | css		| /* SPDX-License-Identifier: <SPDX License Expression> */
+| groovy	| // SPDX-License-Identifier: <SPDX License Expression>
 | html		| <!-- SPDX-License-Identifier: <SPDX License Expression> -->
 | java		| // SPDX-License-Identifier: <SPDX License Expression>
 | js		| /* SPDX-License-Identifier: <SPDX License Expression> */
