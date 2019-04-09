@@ -3,6 +3,9 @@ package de.linutronix.rttest.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -18,12 +21,25 @@ public class DbConf {
 
 	private String initialize (ServletContext context, Properties prop,
 							   String property) {
-		String ovr, val;
+            String ovr, env, val;
 
-		val = prop.getProperty(property);
-		ovr = context.getInitParameter(property);
+            try {
+                Context context1 = new InitialContext();
+                Context envContext = (Context) context1.lookup("java:/comp/env");
+                env = (String) envContext.lookup(property);
+            } catch (NamingException ex) {
+                env = null;
+            }
 
-		return (ovr == null) ? val : ovr;
+            val = prop.getProperty(property);
+            ovr = context.getInitParameter(property);
+            if (env == null) {
+                if (ovr == null) {
+                    return val;
+                }
+                return ovr;
+            }
+            return env;
 	}
 
 	public DbConf(ServletConfig config) throws ServletException {
