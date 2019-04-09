@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: CC-BY-3.0 */
 /*
 	Future Imperfect by HTML5 UP
 	html5up.net | @ajlkn
