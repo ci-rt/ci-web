@@ -76,11 +76,11 @@ public class DbConf {
     }
 
     public String toString() {
-        return "URL    : " + URL +
-                "\ndbuser : " + dbuser +
-                "\ndbpass : " + dbpassword +
-                "\ndebug  : " + debug +
-                "\ndialect: " + dialect;
+        return "URL    : " + URL
+                + "\ndbuser : " + dbuser
+                + "\ndbpass : " + dbpassword
+                + "\ndebug  : " + debug
+                + "\ndialect: " + dialect;
     }
 
     public String getDbclass() throws ServletException {
