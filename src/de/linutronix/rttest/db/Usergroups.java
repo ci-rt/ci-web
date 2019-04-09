@@ -48,7 +48,7 @@ public class Usergroups {
      *
      * @param newgroup group name
      */
-    public Usergroups(String newgroup) {
+    public Usergroups(final String newgroup) {
         this.groupname = newgroup;
         this.enabled = true;
     }
@@ -67,7 +67,7 @@ public class Usergroups {
      *
      * @param newid group ID
      */
-    public void setId(Long newid) {
+    public void setId(final Long newid) {
         this.id = newid;
     }
 
@@ -85,7 +85,7 @@ public class Usergroups {
      *
      * @param group group name
      */
-    public void setGroup(String group) {
+    public void setGroup(final String group) {
         this.groupname = group;
     }
 
@@ -103,7 +103,7 @@ public class Usergroups {
      *
      * @param enable group status
      */
-    public void setGroupStatus(Boolean enable) {
+    public void setGroupStatus(final Boolean enable) {
         this.enabled = enable;
     }
 

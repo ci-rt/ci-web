@@ -50,7 +50,7 @@ public class Testscript extends HttpServlet {
      * @throws javax.servlet.ServletException on database error.
      */
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init(final ServletConfig config) throws ServletException {
         super.init(config);
 
         InputStream input = getServletContext()
@@ -90,8 +90,9 @@ public class Testscript extends HttpServlet {
      * @throws java.io.IOException
      */
     @Override
-    protected void doGet(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(final HttpServletRequest request,
+            final HttpServletResponse response)
+            throws ServletException, IOException {
         try {
             Connection con = DriverManager.getConnection(url, user, password);
             Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -150,8 +151,9 @@ public class Testscript extends HttpServlet {
      * @throws java.io.IOException
      */
     @Override
-    protected void doPost(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(final HttpServletRequest request,
+            final HttpServletResponse response)
+            throws ServletException, IOException {
         doGet(request, response);
     }
 }

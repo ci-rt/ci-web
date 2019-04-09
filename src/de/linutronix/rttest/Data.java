@@ -44,7 +44,7 @@ public class Data extends DataSourceServlet {
      * @throws ServletException if initialization fails.
      */
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init(final ServletConfig config) throws ServletException {
         super.init(config);
         db = new DbConf(config);
     }
@@ -72,8 +72,8 @@ public class Data extends DataSourceServlet {
      * @throws DataSourceException on database configuration errors.
      */
     @Override
-    public DataTable generateDataTable(Query query,
-            HttpServletRequest request)
+    public DataTable generateDataTable(final Query query,
+            final HttpServletRequest request)
             throws DataSourceException {
 
         SqlDatabaseDescription dbDescription = null;

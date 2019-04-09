@@ -45,7 +45,7 @@ public class HibernateHttpServlet extends HttpServlet {
      * @param config servlet configuration
      * @throws ServletException on database configuration error
      */
-    public void init(ServletConfig config) throws ServletException {
+    public void init(final ServletConfig config) throws ServletException {
         super.init(config);
         DbConf dbconf = new DbConf(config);
         logger.log(Level.SEVERE, dbconf.toString());
@@ -60,7 +60,7 @@ public class HibernateHttpServlet extends HttpServlet {
      * @return session factory
      * @throws ServletException on database configuration error
      */
-    private SessionFactory buildSessionFactory(DbConf dbconf)
+    private SessionFactory buildSessionFactory(final DbConf dbconf)
             throws ServletException {
 
         try {
@@ -95,7 +95,7 @@ public class HibernateHttpServlet extends HttpServlet {
      *
      * @param aClass annotated class
      */
-    public void addAnnotatedClass(Class<?> aClass) {
+    public void addAnnotatedClass(final Class<?> aClass) {
         configuration.addAnnotatedClass(aClass);
     }
 

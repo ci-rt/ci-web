@@ -59,8 +59,8 @@ public class DbConf {
      * @param property property key name
      * @return value of property key
      */
-    private String initialize(ServletContext context, Properties prop,
-            String property) {
+    private String initialize(final ServletContext context,
+            final Properties prop, final String property) {
         String ovr, env, val;
 
         try {
@@ -87,7 +87,7 @@ public class DbConf {
      * @param config database configuration
      * @throws ServletException on database errors
      */
-    public DbConf(ServletConfig config) throws ServletException {
+    public DbConf(final ServletConfig config) throws ServletException {
         ServletContext context = config.getServletContext();
 
         InputStream input = context.getResourceAsStream("/WEB-INF/db.properties");

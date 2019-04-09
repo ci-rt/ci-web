@@ -54,7 +54,7 @@ public class Passwd {
      * @param user username
      * @param newsalt password salt
      */
-    public Passwd(String user, byte[] newsalt) {
+    public Passwd(final String user, final byte[] newsalt) {
         this.username = user;
         this.salt = newsalt;
         this.enabled = true;
@@ -74,7 +74,7 @@ public class Passwd {
      *
      * @param newid user ID
      */
-    public void setId(Long newid) {
+    public void setId(final Long newid) {
         this.id = newid;
     }
 
@@ -92,7 +92,7 @@ public class Passwd {
      *
      * @param user user name
      */
-    public void setUser(String user) {
+    public void setUser(final String user) {
         this.username = user;
     }
 
@@ -110,7 +110,7 @@ public class Passwd {
      *
      * @param newsalt password salt
      */
-    public void setSalt(byte[] newsalt) {
+    public void setSalt(final byte[] newsalt) {
         this.salt = newsalt;
     }
 
@@ -128,7 +128,7 @@ public class Passwd {
      *
      * @param enable user status
      */
-    public void setUserStatus(Boolean enable) {
+    public void setUserStatus(final Boolean enable) {
         this.enabled = enable;
     }
 }

@@ -88,8 +88,9 @@ public class Kernelconfig extends HttpServlet {
      * @throws java.io.IOException
      */
     @Override
-    protected void doGet(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(final HttpServletRequest request,
+            final HttpServletResponse response)
+            throws ServletException, IOException {
         try {
             Connection con = DriverManager.getConnection(url, user, password);
             Statement stmt = con.createStatement(
@@ -139,8 +140,9 @@ public class Kernelconfig extends HttpServlet {
      * @throws java.io.IOException
      */
     @Override
-    protected void doPost(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(final HttpServletRequest request,
+            final HttpServletResponse response)
+            throws ServletException, IOException {
         doGet(request, response);
     }
 }
