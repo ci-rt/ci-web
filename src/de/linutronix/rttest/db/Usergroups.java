@@ -10,11 +10,11 @@ import org.hibernate.annotations.NaturalId;
 @Entity
 @Table
 public class Usergroups { 
-	@Id
-	@GeneratedValue
-	private Long id;
+        @Id
+        @GeneratedValue
+        private Long id;
  
-	@NaturalId
+        @NaturalId
     private String groupname;
     private Boolean enabled;
 
@@ -42,21 +42,21 @@ public class Usergroups {
         this.groupname = group;
     }
 
-	public Boolean getGroupStatus() {
-		return enabled;
-	}
-	
-	public void setGroupStatus(Boolean enabled) {
-		this.enabled = enabled;
-	}
-	
-	public String toString() {
-		String status;
-		if (enabled)
-			status = "enabled";
-		else
-			status = "disabled";
-		
-		return "'" + groupname + "' " + status;
-	}
+        public Boolean getGroupStatus() {
+                return enabled;
+        }
+        
+        public void setGroupStatus(Boolean enabled) {
+                this.enabled = enabled;
+        }
+        
+        public String toString() {
+                String status;
+                if (enabled)
+                        status = "enabled";
+                else
+                        status = "disabled";
+                
+                return "'" + groupname + "' " + status;
+        }
 }

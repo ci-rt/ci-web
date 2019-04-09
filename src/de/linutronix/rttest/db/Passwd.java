@@ -10,11 +10,11 @@ import org.hibernate.annotations.NaturalId;
 @Entity
 @Table
 public class Passwd { 
-	@Id
-	@GeneratedValue
-	private Long id;
+        @Id
+        @GeneratedValue
+        private Long id;
  
-	@NaturalId
+        @NaturalId
     private String username;
     private byte[] salt;
     private Boolean enabled;
@@ -44,19 +44,19 @@ public class Passwd {
         this.username = user;
     }
 
-	public byte[] getSalt() {
-		return salt;
-	}
+        public byte[] getSalt() {
+                return salt;
+        }
 
-	public void setSalt(byte[] salt) {
-		this.salt = salt;
-	}
-	
-	public Boolean getUserStatus() {
-		return enabled;
-	}
-	
-	public void setUserStatus(Boolean enabled) {
-		this.enabled = enabled;
-	}
+        public void setSalt(byte[] salt) {
+                this.salt = salt;
+        }
+        
+        public Boolean getUserStatus() {
+                return enabled;
+        }
+        
+        public void setUserStatus(Boolean enabled) {
+                this.enabled = enabled;
+        }
 }

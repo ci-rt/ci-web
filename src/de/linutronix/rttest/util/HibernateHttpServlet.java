@@ -17,21 +17,21 @@ import org.hibernate.cfg.Configuration;
 
 public class HibernateHttpServlet extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
-	private SessionFactory sessionFactory;
-	private static Configuration configuration = new Configuration();
-	private static Logger logger = Logger.getLogger("de.linutronix.rttest");
-	
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-		DbConf dbconf = new DbConf(config);
-		logger.log(Level.SEVERE, dbconf.toString());
-		
-		sessionFactory = buildSessionFactory(dbconf);
-	}
-	
+        private static final long serialVersionUID = 1L;
+        private SessionFactory sessionFactory;
+        private static Configuration configuration = new Configuration();
+        private static Logger logger = Logger.getLogger("de.linutronix.rttest");
+        
+        public void init(ServletConfig config) throws ServletException {
+                super.init(config);
+                DbConf dbconf = new DbConf(config);
+                logger.log(Level.SEVERE, dbconf.toString());
+                
+                sessionFactory = buildSessionFactory(dbconf);
+        }
+        
     private SessionFactory buildSessionFactory(DbConf dbconf) throws ServletException {
-    	
+            
         try {
             configuration.setProperty("hibernate.connection.driver_class", dbconf.getDbclass());
             configuration.setProperty("hibernate.connection.url", dbconf.getURL());
@@ -54,7 +54,7 @@ public class HibernateHttpServlet extends HttpServlet {
   
     public void addAnnotatedClass (Class<?> aClass)
     {
-    	configuration.addAnnotatedClass (aClass);
+            configuration.addAnnotatedClass (aClass);
     }
     
     public SessionFactory getSessionFactory() {
@@ -62,7 +62,7 @@ public class HibernateHttpServlet extends HttpServlet {
     }
   
     public Session openSession () {
-    	return getSessionFactory().openSession();
+            return getSessionFactory().openSession();
     }
     
     public void shutdown() {
