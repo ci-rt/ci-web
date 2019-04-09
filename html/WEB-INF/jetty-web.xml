@@ -3,9 +3,16 @@
 <!-- Copyright (c) 2018,2019 Linutronix GmbH -->
 <!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
 <Configure class="org.eclipse.jetty.webapp.WebAppContext">
-  <Get name="sessionHandler">
-    <Get name="sessionManager">
-      <Set name="usingCookies" type="boolean">false</Set>
-    </Get>
-  </Get>
+  <Call id="sh" name="getSessionHandler">
+    <Set name="sessionCache">
+      <New class="org.eclipse.jetty.server.session.DefaultSessionCache">
+        <Arg><Ref id="sh"/></Arg>
+        <Set name="sessionDataStore">
+           <New class="org.eclipse.jetty.server.session.FileSessionDataStore">
+             <Set name="storeDir">/tmp/sessions</Set>
+           </New>
+        </Set>
+      </New>
+    </Set>
+  </Call>
 </Configure>
