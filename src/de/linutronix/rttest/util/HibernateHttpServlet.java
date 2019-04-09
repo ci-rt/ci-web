@@ -30,19 +30,27 @@ public class HibernateHttpServlet extends HttpServlet {
         sessionFactory = buildSessionFactory(dbconf);
     }
 
-    private SessionFactory buildSessionFactory(DbConf dbconf) throws ServletException {
+    private SessionFactory buildSessionFactory(DbConf dbconf)
+            throws ServletException {
 
         try {
-            configuration.setProperty("hibernate.connection.driver_class", dbconf.getDbclass());
-            configuration.setProperty("hibernate.connection.url", dbconf.getURL());
-            configuration.setProperty("hibernate.connection.username", dbconf.getDbuser());
-            configuration.setProperty("hibernate.connection.password", dbconf.getDbpassword());
-            configuration.setProperty("hibernate.dialect", dbconf.getDialect());
+            configuration.setProperty("hibernate.connection.driver_class",
+                    dbconf.getDbclass());
+            configuration.setProperty("hibernate.connection.url",
+                    dbconf.getURL());
+            configuration.setProperty("hibernate.connection.username",
+                    dbconf.getDbuser());
+            configuration.setProperty("hibernate.connection.password",
+                    dbconf.getDbpassword());
+            configuration.setProperty("hibernate.dialect",
+                    dbconf.getDialect());
             configuration.setProperty("hibernate.hbm2ddl.auto", "update");
             configuration.setProperty("hibernate.show_sql", dbconf.getDebug());
             configuration.setProperty("hibernate.connection.pool_size", "10");
 
-            StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
+            StandardServiceRegistryBuilder builder =
+                    new StandardServiceRegistryBuilder()
+                            .applySettings(configuration.getProperties());
 
             return configuration.buildSessionFactory(builder.build());
         } catch (Throwable ex) {

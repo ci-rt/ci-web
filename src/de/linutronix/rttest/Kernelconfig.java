@@ -40,7 +40,8 @@ public class Kernelconfig extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        InputStream input = getServletContext().getResourceAsStream("/WEB-INF/db.properties");
+        InputStream input = getServletContext()
+                .getResourceAsStream("/WEB-INF/db.properties");
         Properties prop = new Properties();
 
         if (input != null) {
@@ -74,19 +75,25 @@ public class Kernelconfig extends HttpServlet {
     }
 
     /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     * response)
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
         try {
             Connection con = DriverManager.getConnection(URL,user,password);
-            Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+            Statement stmt = con.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
             ResultSet rs;
             String id = request.getParameter("id");
 
-            rs = stmt.executeQuery("SELECT defconfig, config, overlay FROM build WHERE id = " + id + ";");
+            rs = stmt.executeQuery(
+                    "SELECT defconfig, config, overlay FROM build WHERE id = "
+                    + id + ";");
             if (!rs.next()) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "config not found");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        "config not found");
                 return;
             }
             byte[] defconf = rs.getBytes("defconfig");
@@ -99,7 +106,8 @@ public class Kernelconfig extends HttpServlet {
             response.setContentType("application/force-download");
             response.setContentLengthLong(defconf.length);
             response.setHeader("Content-Transfer-Encoding", "binary");
-            response.setHeader("Content-Disposition","attachment; filename=\""+filename+"\"");
+            response.setHeader("Content-Disposition",
+                    "attachment; filename=\""+filename+"\"");
 
             OutputStream o = response.getOutputStream();
             o.write(defconf);
@@ -109,14 +117,17 @@ public class Kernelconfig extends HttpServlet {
         }
         catch (Exception e)
         {
-            throw new ServletException("Database error: " + e.getMessage() + "\n" + e.getStackTrace());
+            throw new ServletException("Database error: " + e.getMessage()
+                    + "\n" + e.getStackTrace());
         }
     }
 
     /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     * response)
      */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
 }

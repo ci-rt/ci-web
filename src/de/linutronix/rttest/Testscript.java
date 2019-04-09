@@ -40,7 +40,8 @@ public class Testscript extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        InputStream input = getServletContext().getResourceAsStream("/WEB-INF/db.properties");
+        InputStream input = getServletContext()
+                .getResourceAsStream("/WEB-INF/db.properties");
         Properties prop = new Properties();
 
         if (input != null) {
@@ -58,7 +59,8 @@ public class Testscript extends HttpServlet {
         try {
             Class.forName(DbClass);
         } catch (ClassNotFoundException e) {
-            throw new ServletException("Could not load database class" + DbClass);
+            throw new ServletException("Could not load database class"
+                    + DbClass);
         }
 
         URL = prop.getProperty("URL");
@@ -74,9 +76,11 @@ public class Testscript extends HttpServlet {
     }
 
     /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     * response)
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
         try {
             Connection con = DriverManager.getConnection(URL,user,password);
             Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -96,13 +100,16 @@ public class Testscript extends HttpServlet {
                 filename = "cyclictest-script";
             }
             else {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "test type undefined");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        "test type undefined");
                 return;
             }
 
-            rs = stmt.executeQuery("SELECT testscript FROM "+table+" WHERE id = " + id + ";");
+            rs = stmt.executeQuery("SELECT testscript FROM "+table
+                    + " WHERE id = " + id + ";");
             if (!rs.next()) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "config not found");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        "config not found");
                 return;
             }
             byte[] script = rs.getBytes("testscript");
@@ -111,7 +118,8 @@ public class Testscript extends HttpServlet {
             response.setContentType("application/force-download");
             response.setContentLengthLong(script.length);
             response.setHeader("Content-Transfer-Encoding", "binary");
-            response.setHeader("Content-Disposition","attachment; filename=\""+filename+"\"");
+            response.setHeader("Content-Disposition",
+                    "attachment; filename=\""+filename+"\"");
 
             OutputStream o = response.getOutputStream();
             o.write(script);
@@ -121,14 +129,17 @@ public class Testscript extends HttpServlet {
         }
         catch (Exception e)
         {
-            throw new ServletException("Database error: " + e.getMessage() + "\n" + e.getStackTrace());
+            throw new ServletException("Database error: " + e.getMessage()
+                    + "\n" + e.getStackTrace());
         }
     }
 
     /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     * response)
      */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
 }
