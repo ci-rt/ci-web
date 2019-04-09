@@ -36,6 +36,7 @@ public class Testscript extends Download {
             throws SQLException {
         String test = request.getParameter("test");
         String id = request.getParameter("id");
+        String column = "testscript";
         String filename = "null";
         String table = "null";
 
@@ -48,12 +49,21 @@ public class Testscript extends Download {
                 filename = "cyclictest-script";
                 table = "cyclictest_view";
                 break;
+            case "generic":
+                filename = "generictest-script";
+                table = "generictest_view";
+                break;
+            case "genericlog":
+                column = "testlog";
+                filename = "generictest-log";
+                table = "generictest_view";
+                break;
             default:
                 throw new SQLException("Unknown test");
         }
 
-        return "SELECT '" + filename + "', testscript FROM " + table
-                + " WHERE id = " + id + ";";
+        return "SELECT '" + filename + "', " + column + " AS content FROM "
+                + table + " WHERE id = " + id + ";";
     }
 
     /**
@@ -65,7 +75,7 @@ public class Testscript extends Download {
      */
     @Override
     protected byte[] getContent(final ResultSet rs) throws SQLException {
-            return rs.getBytes("testscript");
+            return rs.getBytes("content");
     }
 
     /**
