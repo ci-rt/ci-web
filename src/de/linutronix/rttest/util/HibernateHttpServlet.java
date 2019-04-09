@@ -15,13 +15,36 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
+/**
+ * HTTP servlet with hibernate support.
+ *
+ * @author Benedikt Spranger
+ */
 public class HibernateHttpServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * The session factory.
+     */
     private SessionFactory sessionFactory;
+
+    /**
+     * The configuration.
+     */
     private static Configuration configuration = new Configuration();
+
+    /**
+     * The logger.
+     */
     private static Logger logger = Logger.getLogger("de.linutronix.rttest");
 
+    /**
+     * Initialize HTTP servlet with hibernate support.
+     *
+     * @param config servlet configuration
+     * @throws ServletException on database configuration error
+     */
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         DbConf dbconf = new DbConf(config);
@@ -30,6 +53,13 @@ public class HibernateHttpServlet extends HttpServlet {
         sessionFactory = buildSessionFactory(dbconf);
     }
 
+    /**
+     * Build session factory.
+     *
+     * @param dbconf database configuration
+     * @return session factory
+     * @throws ServletException on database configuration error
+     */
     private SessionFactory buildSessionFactory(DbConf dbconf)
             throws ServletException {
 
@@ -60,18 +90,36 @@ public class HibernateHttpServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Get configuration metadata from annotations.
+     *
+     * @param aClass annotated class
+     */
     public void addAnnotatedClass(Class<?> aClass) {
         configuration.addAnnotatedClass(aClass);
     }
 
+    /**
+     * Get session factory.
+     *
+     * @return session factory
+     */
     public SessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
+    /**
+     * Open session.
+     *
+     * @return session
+     */
     public Session openSession() {
         return getSessionFactory().openSession();
     }
 
+    /**
+     * Shutdown servlet.
+     */
     public void shutdown() {
         getSessionFactory().close();
     }
