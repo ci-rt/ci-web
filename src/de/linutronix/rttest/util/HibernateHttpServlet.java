@@ -60,8 +60,7 @@ public class HibernateHttpServlet extends HttpServlet {
         }
     }
 
-    public void addAnnotatedClass(Class<?> aClass)
-    {
+    public void addAnnotatedClass(Class<?> aClass) {
         configuration.addAnnotatedClass(aClass);
     }
 

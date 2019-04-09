@@ -127,8 +127,7 @@ public class Testscript extends HttpServlet {
             o.close();
             con.close();
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             throw new ServletException("Database error: " + e.getMessage()
                     + "\n" + e.getStackTrace());
         }
