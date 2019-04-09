@@ -21,102 +21,102 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet("/Kernelconfig")
 public class Kernelconfig extends HttpServlet {
-        private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-        private String URL;
-        private String user;
-        private String password;
+    private String URL;
+    private String user;
+    private String password;
 
-        /**
-         * @see HttpServlet#HttpServlet()
-         */
-        public Kernelconfig() {
-                super();
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public Kernelconfig() {
+        super();
+    }
+
+    /**
+     * @see Servlet#init(ServletConfig)
+     */
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        InputStream input = getServletContext().getResourceAsStream("/WEB-INF/db.properties");
+        Properties prop = new Properties();
+
+        if (input != null) {
+            try {
+                prop.load(input);
+            } catch (IOException e) {
+                throw new ServletException("Failed to read DB properties.");
+            }
+        } else {
+            throw new ServletException("Database not configured.");
         }
 
-        /**
-         * @see Servlet#init(ServletConfig)
-         */
-        public void init(ServletConfig config) throws ServletException {
-                super.init(config);
-
-                InputStream input = getServletContext().getResourceAsStream("/WEB-INF/db.properties");
-                Properties prop = new Properties();
-
-                if (input != null) {
-                        try {
-                                prop.load(input);
-                        } catch (IOException e) {
-                                throw new ServletException("Failed to read DB properties.");
-                        }
-                } else {
-                        throw new ServletException("Database not configured.");
-                }
-
-                // get the property value and print it out
-                String DbClass = prop.getProperty("class");
-                try {
-                        Class.forName(DbClass);
-                } catch (ClassNotFoundException e) {
-                        throw new ServletException("Could not load database class" + DbClass);
-                }
-
-                URL = prop.getProperty("URL");
-                user = prop.getProperty("user");
-                password = prop.getProperty("password");  
+        // get the property value and print it out
+        String DbClass = prop.getProperty("class");
+        try {
+            Class.forName(DbClass);
+        } catch (ClassNotFoundException e) {
+            throw new ServletException("Could not load database class" + DbClass);
         }
 
-        /**
-         * @see Servlet#destroy()
-         */
-        public void destroy() {
-                // TODO Auto-generated method stub
-        }
+        URL = prop.getProperty("URL");
+        user = prop.getProperty("user");
+        password = prop.getProperty("password");
+    }
 
-        /**
-         * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-         */
-        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-                try {
-                        Connection con = DriverManager.getConnection(URL,user,password);
-                        Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-                                                             ResultSet.CONCUR_READ_ONLY);
-                        ResultSet rs;
-                        String id = request.getParameter("id");
+    /**
+     * @see Servlet#destroy()
+     */
+    public void destroy() {
+        // TODO Auto-generated method stub
+    }
 
-                        rs = stmt.executeQuery("SELECT defconfig, config, overlay FROM build WHERE id = " + id + ";");
-                        if (!rs.next()) {
-                                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "config not found");
-                                return;
-                        }
-                        byte[] defconf = rs.getBytes("defconfig");
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            Connection con = DriverManager.getConnection(URL,user,password);
+            Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            ResultSet rs;
+            String id = request.getParameter("id");
 
-                        String name = rs.getString("config");
-                        String overlay = rs.getString("overlay");
+            rs = stmt.executeQuery("SELECT defconfig, config, overlay FROM build WHERE id = " + id + ";");
+            if (!rs.next()) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "config not found");
+                return;
+            }
+            byte[] defconf = rs.getBytes("defconfig");
 
-                        String filename = name.concat(overlay);
-                        // Set response content type
-                        response.setContentType("application/force-download");
-                        response.setContentLengthLong(defconf.length);
-                        response.setHeader("Content-Transfer-Encoding", "binary");
-                        response.setHeader("Content-Disposition","attachment; filename=\""+filename+"\"");
-                        
-                        OutputStream o = response.getOutputStream();
+            String name = rs.getString("config");
+            String overlay = rs.getString("overlay");
+
+            String filename = name.concat(overlay);
+            // Set response content type
+            response.setContentType("application/force-download");
+            response.setContentLengthLong(defconf.length);
+            response.setHeader("Content-Transfer-Encoding", "binary");
+            response.setHeader("Content-Disposition","attachment; filename=\""+filename+"\"");
+
+            OutputStream o = response.getOutputStream();
             o.write(defconf);
             o.flush();
             o.close();
-                        con.close();
-                }
-                catch (Exception e)
-                {
-                        throw new ServletException("Database error: " + e.getMessage() + "\n" + e.getStackTrace());
-                }
+            con.close();
         }
+        catch (Exception e)
+        {
+            throw new ServletException("Database error: " + e.getMessage() + "\n" + e.getStackTrace());
+        }
+    }
 
-        /**
-         * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-         */
-        protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-                doGet(request, response);
-        }
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
+    }
 }
