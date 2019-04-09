@@ -9,4 +9,15 @@
   <WatchedResource>META-INF/context.xml</WatchedResource>
   <WatchedResource>WEB-INF/web.xml</WatchedResource>
   <WatchedResource>WEB-INF/db.properties</WatchedResource>
+
+  <!-- Database access configuration -->
+  <!--
+  <Parameter name="URL" value="jdbc:postgresql://db.example.com/RT-Test?currentSchema=ci-rt"/>
+  <Parameter name="debug" value="true"/>
+  <Parameter name="dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+  <Parameter name="class" value="org.postgresql.Driver"/>
+  <Parameter name="user" value="user"/>
+  <Parameter name="password" value="password"/>
+  -->
+
 </Context>

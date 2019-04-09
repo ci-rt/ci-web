@@ -96,6 +96,59 @@ After development, the WAR file can be deployed on tomcat. Therefore, open
 http://localhost:8080/manager/html in the web browser. The WAR file to deploy can
 be uploaded and then started in the Applications overview web interface.
 
+
+Configure database access
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The database access can be configured in two alternative ways:
+
+- db.properties file
+- servlet context
+
+Caution: Configurations done in servlet context will override configurations of
+db.properties file!
+
+
+db.properties file
+^^^^^^^^^^^^^^^^^^
+
+The db.properties file can be changed to fit the own needs either before
+compilation (location is html/WEB-INF/db.properties) or after deployment. The
+disadvantage of this method is, that db.properties file has to be adapted for
+every new version of ci-web. It might be an easy and fast solution during
+development.
+
+When changing db.properties file after deployment, tomcat needs to be restarted.
+
+
+servlet context
+^^^^^^^^^^^^^^^
+
+For persistent configuration of database access, usage of the servlet context is
+best practice here.
+
+Therefore, please edit the global configuration file
+${Catalina_base}/conf/context.xml (On debian systems /etc/tomcatX/context.xml)
+and add the following XML snippet into the <Context> section (change the
+parameters to suit your needs):
+
+----
+<Parameter name="URL" value="jdbc:postgresql://db.example.com/RT-Test?currentSchema=ci-rt"/>
+<Parameter name="debug" value="true"/>
+<Parameter name="dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+<Parameter name="class" value="org.postgresql.Driver"/>
+<Parameter name="user" value="user"/>
+<Parameter name="password" value="password"/>
+----
+
+A restart of tomcat is required after the change. The database configuration is
+then available through the servlet context.
+
+The XML snippet above is also added to META-INF/context.xml but commented out.
+Experienced tomcat administrators could use this file as base for context.xml
+based web application deployment of ci-web.
+
+
 Make a release
 ~~~~~~~~~~~~~~
 
