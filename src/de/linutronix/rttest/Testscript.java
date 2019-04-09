@@ -94,12 +94,10 @@ public class Testscript extends HttpServlet {
             if (test.equals("build")) {
                 table = "build";
                 filename = "buildtest-script";
-            }
-            else if (test.equals("cyclic")) {
+            } else if (test.equals("cyclic")) {
                 table = "cyclictest_view";
                 filename = "cyclictest-script";
-            }
-            else {
+            } else {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                         "test type undefined");
                 return;
@@ -126,8 +124,7 @@ public class Testscript extends HttpServlet {
             o.flush();
             o.close();
             con.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new ServletException("Database error: " + e.getMessage()
                     + "\n" + e.getStackTrace());
         }
