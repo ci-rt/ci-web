@@ -20,14 +20,29 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Servlet implementation class Data
+ * Servlet implementation of class Data.
  */
 @WebServlet("/Data")
 public class Data extends DataSourceServlet {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * Database configuration settings.
+     */
     private DbConf db;
 
+    /**
+     * Initialize servlet used to display datasets.
+     *
+     * The datasource servlet needs to initialize both:
+     * - the servlet itself and
+     * - the database access.
+     *
+     * @param config Database and Servlet configuration data from the
+     *               application server.
+     * @throws ServletException if initialization fails.
+     */
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -35,15 +50,27 @@ public class Data extends DataSourceServlet {
     }
 
     /**
+     * Provide capabilities about the datasource.
+     *
      * The SQL predefined capabilities set is a special custom set for SQL
      * databases. This implements most of the data source capabilities more
      * efficiently.
+     *
+     * @return The datasource is capable to use SQL.
      */
     @Override
     public Capabilities getCapabilities() {
         return Capabilities.SQL;
     }
 
+    /**
+     * Handle datasource queries.
+     *
+     * @param query datasource query to handle
+     * @param request the html request from the user
+     * @return query result
+     * @throws DataSourceException on database configuration errors.
+     */
     @Override
     public DataTable generateDataTable(Query query,
             HttpServletRequest request)
@@ -65,12 +92,16 @@ public class Data extends DataSourceServlet {
     }
 
     /**
+     * Provide servlet access restriction mode.
+     *
      * NOTE: By default, this function returns true, which means that cross
-     * domain requests are rejected. This check is disabled here so examples can
-     * be used directly from the address bar of the browser. Bear in mind that
-     * this exposes your data source to xsrf attacks. If the only use of the
-     * data source url is from your application, that runs on the same domain,
-     * it is better to remain in restricted mode.
+     * domain requests are rejected. This check is disabled here to ease
+     * development.
+     * Bear in mind that this exposes your data source to xsrf attacks. If the
+     * only use of the data source url is from your application, that runs on
+     * the same domain, it is better to remain in restricted mode.
+     *
+     * @return disable restriction mode
      */
     @Override
     protected boolean isRestrictedAccessMode() {
