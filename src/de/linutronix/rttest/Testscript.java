@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class Testscript
+ * Servlet implementation class Testscript.
  */
 @WebServlet("/Testscript")
 public class Testscript extends HttpServlet {
@@ -39,7 +39,15 @@ public class Testscript extends HttpServlet {
     }
 
     /**
-     * @see Servlet#init(ServletConfig)
+     * Initialize Kernelconfig servlet used to deliver kernel configs.
+     *
+     * The Kernelconfig servlet needs to initialize both:
+     * - the servlet itself and
+     * - the database access.
+     *
+     * @param config Database and Servlet configuration data from the
+     *               application server.
+     * @throws javax.servlet.ServletException on database error.
      */
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -74,8 +82,12 @@ public class Testscript extends HttpServlet {
     }
 
     /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-     * response)
+     * GET callback to deliver test scripts.
+     *
+     * @param request the html request from the user
+     * @param response GET response delivering the test scripts
+     * @throws javax.servlet.ServletException
+     * @throws java.io.IOException
      */
     @Override
     protected void doGet(HttpServletRequest request,
@@ -130,8 +142,12 @@ public class Testscript extends HttpServlet {
     }
 
     /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-     * response)
+     * POST callback to deliver kernel configs.
+     *
+     * @param request the html request from the user
+     * @param response POST response delivering kernel configs
+     * @throws javax.servlet.ServletException
+     * @throws java.io.IOException
      */
     @Override
     protected void doPost(HttpServletRequest request,
