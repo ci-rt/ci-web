@@ -14,15 +14,51 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+/**
+ * class DBConf for Database Configuration.
+ *
+ * @author Benedikt Spranger
+ */
 public class DbConf {
 
+    /**
+     * The database connection URL.
+     */
     private String url;
+
+    /**
+     * The database user.
+     */
     private String dbuser;
+
+    /**
+     * The database password.
+     */
     private String dbpassword;
+
+    /**
+     * The database driver class.
+     */
     private String dbclass;
+
+    /**
+     * The debug status.
+     */
     private String debug;
+
+    /**
+     * The database SQL dialect.
+     */
     private String dialect;
 
+    /**
+     * Initialize database connection class member.
+     *
+     * @param context application server context
+     * @param prop properties file
+     * @param property property key name
+     * @return value of property key
+     */
     private String initialize(ServletContext context, Properties prop,
             String property) {
         String ovr, env, val;
@@ -45,6 +81,12 @@ public class DbConf {
         return env;
     }
 
+    /**
+     * Database configuration class.
+     *
+     * @param config database configuration
+     * @throws ServletException on database errors
+     */
     public DbConf(ServletConfig config) throws ServletException {
         ServletContext context = config.getServletContext();
 
@@ -76,6 +118,11 @@ public class DbConf {
         dialect = initialize(context, prop, "dialect");
     }
 
+    /**
+     * represent object as String.
+     *
+     * @return string representation of object
+     */
     public String toString() {
         return "URL    : " + url
                 + "\ndbuser : " + dbuser
@@ -84,6 +131,12 @@ public class DbConf {
                 + "\ndialect: " + dialect;
     }
 
+    /**
+     * Get database driver class.
+     *
+     * @return database driver class
+     * @throws ServletException if database driver class is not set
+     */
     public String getDbclass() throws ServletException {
         if (dbclass == null) {
             throw new ServletException("db.property: class not set");
@@ -91,6 +144,12 @@ public class DbConf {
         return dbclass;
     }
 
+    /**
+     * Get database connection URL.
+     *
+     * @return database connection URL
+     * @throws ServletException if database connection URL is not set
+     */
     public String getURL() throws ServletException {
         if (dbclass == null) {
             throw new ServletException("db.property: class not set");
@@ -98,6 +157,12 @@ public class DbConf {
         return url;
     }
 
+    /**
+     * Get database user.
+     *
+     * @return database user
+     * @throws ServletException if database user is not set
+     */
     public String getDbuser() throws ServletException {
         if (dbuser == null) {
             throw new ServletException("db.property: user not set");
@@ -105,6 +170,12 @@ public class DbConf {
         return dbuser;
     }
 
+    /**
+     * Get database password.
+     *
+     * @return database password
+     * @throws ServletException if database password is not set
+     */
     public String getDbpassword() throws ServletException {
         if (dbpassword == null) {
             throw new ServletException("db.property: password not set");
@@ -112,6 +183,11 @@ public class DbConf {
         return dbpassword;
     }
 
+    /**
+     * Get debug status.
+     *
+     * @return debug status
+     */
     public String getDebug() {
         if (debug == null) {
             debug = "false";
@@ -119,6 +195,12 @@ public class DbConf {
         return debug;
     }
 
+    /**
+     * Get database SQL dialect.
+     *
+     * @return database SQL dialect
+     * @throws ServletException if database SQL dialect is not set
+     */
     public String getDialect() throws ServletException {
         if (dialect == null) {
             throw new ServletException("db.property: dialect not set");
