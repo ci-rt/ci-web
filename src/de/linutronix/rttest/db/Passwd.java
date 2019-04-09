@@ -3,7 +3,10 @@
 
 package de.linutronix.rttest.db;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.NaturalId;
 
