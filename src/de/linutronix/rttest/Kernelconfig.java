@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class Kernelconfig
+ * Servlet implementation class Kernelconfig.
  */
 @WebServlet("/Kernelconfig")
 public class Kernelconfig extends HttpServlet {
@@ -39,10 +39,18 @@ public class Kernelconfig extends HttpServlet {
     }
 
     /**
-     * @see Servlet#init(ServletConfig)
+     * Initialize Kernelconfig servlet used to deliver kernel configs.
+     *
+     * The Kernelconfig servlet needs to initialize both:
+     * - the servlet itself and
+     * - the database access.
+     *
+     * @param config Database and Servlet configuration data from the
+     *               application server.
+     * @throws javax.servlet.ServletException on database error.
      */
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init(final ServletConfig config) throws ServletException {
         super.init(config);
 
         InputStream input = getServletContext()
@@ -59,7 +67,6 @@ public class Kernelconfig extends HttpServlet {
             throw new ServletException("Database not configured.");
         }
 
-        // get the property value and print it out
         String dbClass = prop.getProperty("class");
         try {
             Class.forName(dbClass);
@@ -73,8 +80,12 @@ public class Kernelconfig extends HttpServlet {
     }
 
     /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-     * response)
+     * GET callback to deliver kernel configs.
+     *
+     * @param request the html request from the user
+     * @param response GET response delivering kernel configs
+     * @throws javax.servlet.ServletException
+     * @throws java.io.IOException
      */
     @Override
     protected void doGet(HttpServletRequest request,
@@ -120,8 +131,12 @@ public class Kernelconfig extends HttpServlet {
     }
 
     /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-     * response)
+     * POST callback to deliver kernel configs.
+     *
+     * @param request the html request from the user
+     * @param response POST response delivering kernel configs
+     * @throws javax.servlet.ServletException
+     * @throws java.io.IOException
      */
     @Override
     protected void doPost(HttpServletRequest request,
