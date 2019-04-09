@@ -28,6 +28,7 @@ public class Data extends DataSourceServlet {
     private static final long serialVersionUID = 1L;
     private DbConf db;
 
+    @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         db = new DbConf(config);

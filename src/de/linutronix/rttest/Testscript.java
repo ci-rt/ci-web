@@ -41,6 +41,7 @@ public class Testscript extends HttpServlet {
     /**
      * @see Servlet#init(ServletConfig)
      */
+    @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
@@ -83,6 +84,7 @@ public class Testscript extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      * response)
      */
+    @Override
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         try {
@@ -138,6 +140,7 @@ public class Testscript extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
      * response)
      */
+    @Override
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
