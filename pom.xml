@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>RT-Test</groupId>
   <artifactId>RT-Test</artifactId>
-  <version>0.1.10</version>
+  <version>0.1.11-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>CiRTLTest</name>
   <url>https://github.com/ci-rt/ci-web</url>
