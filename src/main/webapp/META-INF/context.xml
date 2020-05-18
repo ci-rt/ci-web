@@ -2,14 +2,10 @@
 <!DOCTYPE xml>
 <!-- SPDX-License-Identifier: MIT -->
 <!-- Copyright (c) 2016-2019 Linutronix GmbH -->
-<Context path=""
-	antiResourceLocking="false"
-	useHttpOnly="true"
-	cookies="false">
+<Context antiResourceLocking="false" cookies="false" path="/RT-Test" useHttpOnly="true">
   <WatchedResource>META-INF/context.xml</WatchedResource>
   <WatchedResource>WEB-INF/web.xml</WatchedResource>
   <WatchedResource>WEB-INF/db.properties</WatchedResource>
-
   <!-- Database access configuration -->
   <!--
   <Parameter name="URL" value="jdbc:postgresql://db.example.com/RT-Test?currentSchema=ci-rt"/>
@@ -19,5 +15,4 @@
   <Parameter name="user" value="user"/>
   <Parameter name="password" value="password"/>
   -->
-
 </Context>

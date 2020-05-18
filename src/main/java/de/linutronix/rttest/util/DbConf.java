@@ -64,7 +64,9 @@ public class DbConf implements Serializable {
      */
     private String initialize(final ServletContext context,
             final Properties prop, final String property) {
-        String ovr, env, val;
+        String env;
+        String ovr;
+        String val;
 
         try {
             Context context1 = new InitialContext();

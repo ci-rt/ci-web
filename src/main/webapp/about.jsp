@@ -20,7 +20,7 @@
         <h2>About</h2>
       </div>
     </header>
-    
+
     <p>The Linutronix Test Environment (CI) automatically tests changes of the
     PREEMPT_RT patch on different hardware platforms with a defined test
     procedure. Following is a description of the defined test procedure and
@@ -36,16 +36,16 @@
     three phases, depending on the specification:</p>
 
     <ol>
-    
+
       <li> Build test: The kernel configuration (with a defined overlay, such
       as debug overlay) is compiled on a build server with the source of the
       updated branch. There is no need for an assigned target for every kernel
       configuration of this phase.</li>
-      
+
       <li> Boot test: The built kernel and device tree are booted on the
       specified target. For this, kexec is used. This test is successful only
       if there is no warning output during boot.</li>
-      
+
       <li> Cyclictest: After a successful boot, the latency measurement tool
       cyclictest is used to detect system latency under a defined load. If the
       latency exceeds a defined threshold, cyclictest aborts and this test
@@ -94,7 +94,7 @@
 
 <!-- Scripts -->
 <%@ include file="scripts.jspf" %>
-<script src="assets/js/overview.js"></script>
+<script src="<%=request.getContextPath()%>/assets/js/overview.js"></script>
 <script>embedCharts()</script>
 
 </body>

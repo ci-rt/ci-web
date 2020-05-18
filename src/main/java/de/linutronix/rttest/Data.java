@@ -12,7 +12,12 @@ import com.google.visualization.datasource.query.Query;
 import com.google.visualization.datasource.util.SqlDataSourceHelper;
 import com.google.visualization.datasource.util.SqlDatabaseDescription;
 
+import de.linutronix.rttest.util.CiRTLCred;
 import de.linutronix.rttest.util.DbConf;
+
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -26,6 +31,11 @@ import javax.servlet.http.HttpServletRequest;
 public class Data extends DataSourceServlet {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     *
+     */
+    private static final Logger LOGGER = Logger.getLogger(Data.class.getName());
 
     /**
      * Database configuration settings.
@@ -77,15 +87,31 @@ public class Data extends DataSourceServlet {
             throws DataSourceException {
 
         SqlDatabaseDescription dbDescription = null;
+        CiRTLCred cred;
+        String u;
+        String p;
 
         try {
+            cred = CiRTLCred.getCred(request);
+
+            if (cred != null) {
+                u = cred.getUser();
+                p = cred.getPasswd();
+            } else {
+                u = db.getDbuser();
+                p = db.getDbpassword();
+            }
+
             dbDescription = new SqlDatabaseDescription(
-                    db.getURL(), db.getDbuser(), db.getDbpassword(),
-                    request.getParameter("table"));
-        } catch (ServletException e) {
-            e.printStackTrace();
+                    db.getURL(), u, p, request.getParameter("table"));
+        } catch (ServletException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
             throw new DataSourceException(ReasonType.INTERNAL_ERROR,
                     "Database configuration error: ");
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            throw new DataSourceException(ReasonType.INTERNAL_ERROR,
+                    "Database credential error: ");
         }
 
         return SqlDataSourceHelper.executeQuery(query, dbDescription);

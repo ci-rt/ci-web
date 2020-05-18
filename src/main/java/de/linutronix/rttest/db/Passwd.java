@@ -3,6 +3,9 @@
 
 package de.linutronix.rttest.db;
 
+import java.io.Serializable;
+import java.util.Base64;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -17,7 +20,7 @@ import org.hibernate.annotations.NaturalId;
  */
 @Entity
 @Table
-public class Passwd {
+public class Passwd implements Serializable {
 
     /**
      * The user ID.
@@ -33,9 +36,14 @@ public class Passwd {
     private String username;
 
     /**
+     * The real name.
+     */
+    private String realname;
+
+    /**
      * The user password salt.
      */
-    private byte[] salt;
+    private String salt;
 
     /**
      * The user status.
@@ -52,11 +60,13 @@ public class Passwd {
      * Passwd class constructor.
      *
      * @param user username
+     * @param real realname
      * @param newsalt password salt
      */
-    public Passwd(final String user, final byte[] newsalt) {
+    public Passwd(final String user, final String real, final byte[] newsalt) {
         this.username = user;
-        this.salt = newsalt.clone();
+        this.realname = real;
+        this.salt = Base64.getEncoder().encodeToString(newsalt);
         this.enabled = true;
     }
 
@@ -76,6 +86,24 @@ public class Passwd {
      */
     public void setId(final Long newid) {
         this.id = newid;
+    }
+
+    /**
+     * Get real name.
+     *
+     * @return real name
+     */
+    public String getRealname() {
+        return realname;
+    }
+
+    /**
+     * Set real name.
+     *
+     * @param real name
+     */
+    public void setRealname(final String real) {
+        this.realname = real;
     }
 
     /**
@@ -102,7 +130,7 @@ public class Passwd {
      * @return password salt
      */
     public byte[] getSalt() {
-        return salt.clone();
+        return Base64.getDecoder().decode(salt);
     }
 
     /**
@@ -111,7 +139,7 @@ public class Passwd {
      * @param newsalt password salt
      */
     public void setSalt(final byte[] newsalt) {
-        this.salt = newsalt.clone();
+        this.salt = Base64.getEncoder().encodeToString(newsalt);
     }
 
     /**
