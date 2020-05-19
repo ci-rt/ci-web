@@ -35,6 +35,11 @@
 
     <!-- Checks for Size Violations.                    -->
     <!-- See http://checkstyle.sourceforge.net/config_sizes.html -->
+    <!-- Target is 80 chars per line - set hard limit to 85 -->
+    <module name="LineLength">
+      <property name="max" value="85"/>
+    </module>
+
     <module name="FileLength"/>
 
     <!-- Checks for whitespace                               -->
@@ -58,6 +63,7 @@
     <!-- </module> -->
 
     <module name="TreeWalker">
+      <module name="SuppressWarnings"/>
 
         <!-- Checks for Javadoc comments.                     -->
         <!-- See http://checkstyle.sourceforge.net/config_javadoc.html -->
@@ -89,10 +95,6 @@
 
         <!-- Checks for Size Violations.                    -->
         <!-- See http://checkstyle.sourceforge.net/config_sizes.html -->
-	<!-- Target is 80 chars per line - set hard limit to 85 -->
-        <module name="LineLength">
-	  <property name="max" value="85"/>
-	</module>
         <module name="MethodLength"/>
         <module name="ParameterNumber"/>
 
