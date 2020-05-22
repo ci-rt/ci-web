@@ -7,8 +7,8 @@
   <!-- Intro -->
   <section id="intro">
     <header>
-      <a href="<%=request.getContextPath()%>/index.jsp" class="logo">
-	<img src="<%=request.getContextPath()%>/images/logo_rt.png" alt=""/>
+      <a href="<%=request.getContextPath()%>/index.jsp">
+	<img class="image featured" src="<%=request.getContextPath()%>/images/logo_rt.png" alt="preempt-RT logo."/>
 	</a>
 	<h2>Continuous Integration</h2>
     </header>
