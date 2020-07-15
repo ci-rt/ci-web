@@ -30,9 +30,11 @@
                             reported an error while handling your request.
                         </div>
                         <hr>
-                        <a href=
+                        Send an error report to the CI-Team
+                        <a class="fas fa-envelope" href=
                            "mailto:ci@linutronix.de?subject=CI-RT%20web%20failure&body=An%20failure%20occured%20in%20the%20component%20%22${pageContext.errorData.servletName}%22%20while%20handling%20%22${pageContext.errorData.getRequestURI()}%22%20at%20${Date(System.currentTimeMillis())}.">
-                            Send an error report to the CI-Team</a>
+                            <span class="label">Email</span>
+                        </a>
                     </div>
                 </article>
             </div>

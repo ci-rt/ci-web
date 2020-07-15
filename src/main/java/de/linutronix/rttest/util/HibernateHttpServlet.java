@@ -85,8 +85,8 @@ public class HibernateHttpServlet extends HttpServlet {
             return configuration.buildSessionFactory(builder.build());
         } catch (Throwable ex) {
             // Make sure you log the exception, as it might be swallowed
-            System.err.println("Initial SessionFactory creation failed." + ex);
-            throw new ExceptionInInitializerError(ex);
+            System.err.println("Initial SessionFactory creation failed: " + ex);
+            return null;
         }
     }
 
@@ -103,8 +103,11 @@ public class HibernateHttpServlet extends HttpServlet {
      * Get session factory.
      *
      * @return session factory
+     * @throws javax.servlet.ServletException
      */
-    public SessionFactory getSessionFactory() {
+    public SessionFactory getSessionFactory() throws ServletException {
+        if (sessionFactory == null)
+            throw new ServletException("Database configuration error.");
         return sessionFactory;
     }
 
@@ -112,15 +115,17 @@ public class HibernateHttpServlet extends HttpServlet {
      * Open session.
      *
      * @return session
+     * @throws javax.servlet.ServletException
      */
-    public Session openSession() {
+    public Session openSession() throws ServletException {
         return getSessionFactory().openSession();
     }
 
     /**
      * Shutdown servlet.
+     * @throws javax.servlet.ServletException
      */
-    public void shutdown() {
+    public void shutdown() throws ServletException {
         getSessionFactory().close();
     }
 
