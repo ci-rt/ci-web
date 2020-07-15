@@ -50,7 +50,7 @@
   <!-- Footer -->
   <section id="footer">
     <ul class="icons">
-      <li>You have questions or suggestions?<br/> Do not hesitate to contact the CI-Team!<a href="mailto:ci@linutronix.de" class="fa-envelope"><span class="label">Email</span></a></li>
+      <li>You have questions or suggestions?<br/> Do not hesitate to contact the CI-Team!<a href="mailto:ci@linutronix.de" class="fas fa-envelope"><span class="label">Email</span></a></li>
     </ul>
     <p class="copyright">&copy; Untitled. Design: <a href="http://html5up.net">HTML5 UP</a>.</p>
     <% ResourceBundle resource = ResourceBundle.getBundle("application");
