@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- SPDX-License-Identifier: MIT -->
 <!-- Copyright (c) 2016-2019 Linutronix GmbH -->
-<web-app id="RT-Test" version="3.1"
+<web-app id="RT-Test" version="4.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
 
   <display-name>Real-Time Linux Continuous Integration</display-name>
   <description>Real-Time Linux Continuous Integration Application</description>
 
   <!-- Security configuration -->
-  <session-config enable-cookies="false" enable-url-rewriting="true">
-    <session-timeout>30</session-timeout>
+  <session-config>
+    <session-timeout>120</session-timeout>
+    <tracking-mode>URL</tracking-mode>
   </session-config>
 </web-app>
